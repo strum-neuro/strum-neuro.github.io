@@ -29,6 +29,12 @@ Every figure on the site is measured from the recordings. The landing page's ses
 the block and lull medians from `strum-structure.json`; if those change, update the `BLOCKS` and
 `LULL` constants at the bottom of `index.html` to match.
 
+## Not yet indexed
+
+`robots.txt` disallows all crawlers and `index.html` carries `noindex, nofollow`, so the site does
+not appear in search results while the dataset is unreleased. The URL still works for anyone given
+it. **To publish: delete `robots.txt` and remove the `noindex` meta tag from `index.html`.**
+
 ## Notes
 
 - Everything is static and self-contained: no build step, no external scripts, fonts or images.
