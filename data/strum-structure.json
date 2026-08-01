@@ -1,0 +1,1272 @@
+{
+  "_about": {
+    "dataset": "STRUM — dyadic multimodal neuroergonomics recordings (SCCN, UC San Diego)",
+    "purpose": "The standard structure of the STRUM experiment: five canonical blocks of missions, with mission onsets and durations measured across every complete instance in the dataset.",
+    "generated_by": "viz/build_structure.py",
+    "sources": [
+      ".context/block-structure.tsv",
+      ".context/mission-events.tsv",
+      ".context/session-blocks.tsv"
+    ],
+    "how_measured": "scripts/extract_task_structure.py reads every session's events.tsv, resolves block intervals with strum_bids.segments.resolve_block_intervals, identifies each block by its mission sequence (canonical_block), and takes the median onset and duration of each mission position over the COMPLETE instances of that block. A block counts as complete only if its mission sequence matches the canonical one AND every mission is bounded — when a recording starts mid-mission that mission emits only an end marker, and a sequence-only check would wrongly call the block complete.",
+    "caveats": [
+      "Onsets and durations are MEDIANS. Missions are event-driven, not fixed-length: the observed range is given per mission and is wide.",
+      "A block's timeline starts at 0 = that block's first mission onset. Blocks are separated by lulls, which are not part of any block.",
+      "Mission names encode the two members' roles in order (participant 0, participant 1) — verified, see role_evidence."
+    ],
+    "role_evidence": {
+      "claim": "A mission named <condition>-<X>-<Y> assigns role X to participant 0 and role Y to participant 1.",
+      "test": "Which member emits the role-specific events, over 24 recordings.",
+      "results": [
+        "indiv-pan-watch: pancam_agent_visible / pancam_reported / pancam_false_report are 100% participant 0",
+        "indiv-watch-pan: the same three families are 100% participant 1",
+        "indiv-drive-watch: stimulus_curbside 2791 p0 vs 6 p1",
+        "indiv-watch-drive: stimulus_curbside 4 p0 vs 1490 p1",
+        "coop-vehicle-aerial: stimulus_curbside 95% p0",
+        "coop-aerial-vehicle: stimulus_curbside 97% p1",
+        "coop-movetogether: stimulus_curbside 48% / 52% — symmetric",
+        "coop-secureperimeter: response_button 87% 'both' — symmetric"
+      ]
+    }
+  },
+  "role_gloss": {
+    "pan": "panoramic camera — scan the 360° feed and report agents",
+    "watch": "supporting watch — monitor, answer queries, no primary vehicle role",
+    "drive": "drive the ground vehicle along the curbside route",
+    "vehicle": "ground vehicle",
+    "aerial": "aerial vehicle"
+  },
+  "lull_median_s": 182.6,
+  "session_total_s": 10082.1,
+  "blocks": [
+    {
+      "block": "A",
+      "canonical_index": 0,
+      "duration_median": 2292.2,
+      "missions": [
+        {
+          "position": 0,
+          "type": "indiv-pan-watch",
+          "condition": "individual",
+          "onset": 0.0,
+          "onset_min": 0.0,
+          "onset_max": 0.0,
+          "duration": 341.0,
+          "duration_min": 333.1,
+          "duration_max": 368.1,
+          "n": 42
+        },
+        {
+          "position": 1,
+          "type": "indiv-watch-drive",
+          "condition": "individual",
+          "onset": 341.0,
+          "onset_min": 333.2,
+          "onset_max": 368.1,
+          "duration": 324.6,
+          "duration_min": 200.1,
+          "duration_max": 438.1,
+          "n": 42
+        },
+        {
+          "position": 2,
+          "type": "coop-movetogether",
+          "condition": "cooperative",
+          "onset": 663.0,
+          "onset_min": 537.4,
+          "onset_max": 777.3,
+          "duration": 344.0,
+          "duration_min": 250.3,
+          "duration_max": 494.3,
+          "n": 42
+        },
+        {
+          "position": 3,
+          "type": "indiv-watch-pan",
+          "condition": "individual",
+          "onset": 1007.0,
+          "onset_min": 852.5,
+          "onset_max": 1218.5,
+          "duration": 321.8,
+          "duration_min": 264.5,
+          "duration_max": 372.9,
+          "n": 42
+        },
+        {
+          "position": 4,
+          "type": "indiv-drive-watch",
+          "condition": "individual",
+          "onset": 1297.5,
+          "onset_min": 1189.8,
+          "onset_max": 1523.4,
+          "duration": 327.2,
+          "duration_min": 206.1,
+          "duration_max": 496.1,
+          "n": 42
+        },
+        {
+          "position": 5,
+          "type": "coop-aerial-vehicle",
+          "condition": "cooperative",
+          "onset": 1666.6,
+          "onset_min": 1496.2,
+          "onset_max": 1927.5,
+          "duration": 436.0,
+          "duration_min": 276.0,
+          "duration_max": 675.1,
+          "n": 42
+        }
+      ],
+      "delivered": {
+        "instances": 72,
+        "complete": 42
+      }
+    },
+    {
+      "block": "B",
+      "canonical_index": 1,
+      "duration_median": 1596.9,
+      "missions": [
+        {
+          "position": 0,
+          "type": "coop-movetogether",
+          "condition": "cooperative",
+          "onset": 0.0,
+          "onset_min": 0.0,
+          "onset_max": 0.0,
+          "duration": 363.3,
+          "duration_min": 257.5,
+          "duration_max": 694.3,
+          "n": 68
+        },
+        {
+          "position": 1,
+          "type": "coop-vehicle-aerial",
+          "condition": "cooperative",
+          "onset": 363.3,
+          "onset_min": 257.5,
+          "onset_max": 694.3,
+          "duration": 437.1,
+          "duration_min": 287.5,
+          "duration_max": 679.0,
+          "n": 68
+        },
+        {
+          "position": 2,
+          "type": "indiv-drive-watch",
+          "condition": "individual",
+          "onset": 801.3,
+          "onset_min": 610.1,
+          "onset_max": 1328.0,
+          "duration": 297.4,
+          "duration_min": 201.7,
+          "duration_max": 734.4,
+          "n": 68
+        },
+        {
+          "position": 3,
+          "type": "coop-secureperimeter",
+          "condition": "cooperative",
+          "onset": 1139.0,
+          "onset_min": 875.4,
+          "onset_max": 1669.4,
+          "duration": 268.2,
+          "duration_min": 240.9,
+          "duration_max": 302.1,
+          "n": 68
+        }
+      ],
+      "delivered": {
+        "instances": 74,
+        "complete": 68
+      }
+    },
+    {
+      "block": "C",
+      "canonical_index": 2,
+      "duration_median": 2181.6,
+      "missions": [
+        {
+          "position": 0,
+          "type": "coop-secureperimeter",
+          "condition": "cooperative",
+          "onset": 0.0,
+          "onset_min": 0.0,
+          "onset_max": 0.0,
+          "duration": 266.1,
+          "duration_min": 236.2,
+          "duration_max": 300.5,
+          "n": 60
+        },
+        {
+          "position": 1,
+          "type": "indiv-watch-pan",
+          "condition": "individual",
+          "onset": 266.1,
+          "onset_min": 236.2,
+          "onset_max": 300.5,
+          "duration": 312.0,
+          "duration_min": 265.2,
+          "duration_max": 378.0,
+          "n": 60
+        },
+        {
+          "position": 2,
+          "type": "indiv-pan-watch",
+          "condition": "individual",
+          "onset": 578.1,
+          "onset_min": 517.0,
+          "onset_max": 670.5,
+          "duration": 305.8,
+          "duration_min": 265.1,
+          "duration_max": 373.0,
+          "n": 60
+        },
+        {
+          "position": 3,
+          "type": "coop-vehicle-aerial",
+          "condition": "cooperative",
+          "onset": 886.2,
+          "onset_min": 790.7,
+          "onset_max": 999.1,
+          "duration": 390.6,
+          "duration_min": 35.0,
+          "duration_max": 640.2,
+          "n": 60
+        },
+        {
+          "position": 4,
+          "type": "coop-aerial-vehicle",
+          "condition": "cooperative",
+          "onset": 1276.0,
+          "onset_min": 825.7,
+          "onset_max": 1639.3,
+          "duration": 433.3,
+          "duration_min": 0.5,
+          "duration_max": 703.1,
+          "n": 60
+        },
+        {
+          "position": 5,
+          "type": "indiv-watch-drive",
+          "condition": "individual",
+          "onset": 1697.8,
+          "onset_min": 826.2,
+          "onset_max": 2117.1,
+          "duration": 260.7,
+          "duration_min": 0.3,
+          "duration_max": 460.8,
+          "n": 60
+        }
+      ],
+      "delivered": {
+        "instances": 68,
+        "complete": 60
+      }
+    },
+    {
+      "block": "D",
+      "canonical_index": 3,
+      "duration_median": 1871.7,
+      "missions": [
+        {
+          "position": 0,
+          "type": "indiv-drive-watch",
+          "condition": "individual",
+          "onset": 0.0,
+          "onset_min": 0.0,
+          "onset_max": 0.0,
+          "duration": 278.1,
+          "duration_min": 213.2,
+          "duration_max": 620.3,
+          "n": 58
+        },
+        {
+          "position": 1,
+          "type": "indiv-pan-watch",
+          "condition": "individual",
+          "onset": 278.1,
+          "onset_min": 213.2,
+          "onset_max": 620.3,
+          "duration": 305.6,
+          "duration_min": 259.6,
+          "duration_max": 380.6,
+          "n": 58
+        },
+        {
+          "position": 2,
+          "type": "coop-vehicle-aerial",
+          "condition": "cooperative",
+          "onset": 606.8,
+          "onset_min": 472.8,
+          "onset_max": 989.2,
+          "duration": 357.8,
+          "duration_min": 255.0,
+          "duration_max": 651.3,
+          "n": 58
+        },
+        {
+          "position": 3,
+          "type": "coop-aerial-vehicle",
+          "condition": "cooperative",
+          "onset": 954.8,
+          "onset_min": 821.6,
+          "onset_max": 1357.8,
+          "duration": 387.3,
+          "duration_min": 238.0,
+          "duration_max": 770.1,
+          "n": 58
+        },
+        {
+          "position": 4,
+          "type": "indiv-watch-pan",
+          "condition": "individual",
+          "onset": 1357.3,
+          "onset_min": 1192.8,
+          "onset_max": 2101.3,
+          "duration": 318.5,
+          "duration_min": 277.8,
+          "duration_max": 379.1,
+          "n": 58
+        }
+      ],
+      "delivered": {
+        "instances": 60,
+        "complete": 58
+      }
+    },
+    {
+      "block": "E",
+      "canonical_index": 4,
+      "duration_median": 1409.3,
+      "missions": [
+        {
+          "position": 0,
+          "type": "indiv-drive-watch",
+          "condition": "individual",
+          "onset": 0.0,
+          "onset_min": 0.0,
+          "onset_max": 0.0,
+          "duration": 306.3,
+          "duration_min": 151.2,
+          "duration_max": 616.2,
+          "n": 54
+        },
+        {
+          "position": 1,
+          "type": "coop-vehicle-aerial",
+          "condition": "cooperative",
+          "onset": 306.3,
+          "onset_min": 151.2,
+          "onset_max": 616.2,
+          "duration": 375.3,
+          "duration_min": 244.2,
+          "duration_max": 568.3,
+          "n": 54
+        },
+        {
+          "position": 2,
+          "type": "coop-aerial-vehicle",
+          "condition": "cooperative",
+          "onset": 688.1,
+          "onset_min": 495.2,
+          "onset_max": 1056.8,
+          "duration": 394.5,
+          "duration_min": 295.2,
+          "duration_max": 1013.4,
+          "n": 54
+        },
+        {
+          "position": 3,
+          "type": "coop-movetogether",
+          "condition": "cooperative",
+          "onset": 1079.0,
+          "onset_min": 839.0,
+          "onset_max": 1854.9,
+          "duration": 331.8,
+          "duration_min": 208.0,
+          "duration_max": 658.8,
+          "n": 54
+        }
+      ],
+      "delivered": {
+        "instances": 56,
+        "complete": 54
+      }
+    }
+  ],
+  "missions": {
+    "coop-aerial-vehicle": {
+      "type": "coop-aerial-vehicle",
+      "condition": "cooperative",
+      "gloss": "Roles swapped: participant 0 aerial, participant 1 ground.",
+      "symmetric": false,
+      "n_instances": 250,
+      "signature": [
+        {
+          "family": "stimulus_curbside",
+          "median": 47.5,
+          "min": 23,
+          "max": 106,
+          "actor": "1",
+          "actor_frac": 0.966
+        },
+        {
+          "family": "agent_wanderer_added",
+          "median": 10.0,
+          "min": 10,
+          "max": 10,
+          "actor": "both",
+          "actor_frac": 1.0
+        },
+        {
+          "family": "checkpoint_move",
+          "median": 7.0,
+          "min": 6,
+          "max": 8,
+          "actor": "both",
+          "actor_frac": 1.0
+        },
+        {
+          "family": "checkpoint_reached",
+          "median": 7.0,
+          "min": 6,
+          "max": 8,
+          "actor": "both",
+          "actor_frac": 1.0
+        },
+        {
+          "family": "checkpoint_created",
+          "median": 1.0,
+          "min": 1,
+          "max": 1,
+          "actor": "both",
+          "actor_frac": 1.0
+        }
+      ],
+      "common": [
+        {
+          "family": "response_speech_ignored",
+          "median": 266.0,
+          "actor": "0",
+          "actor_frac": 0.585
+        },
+        {
+          "family": "query_created",
+          "median": 124.0,
+          "actor": "0",
+          "actor_frac": 0.648
+        },
+        {
+          "family": "stimulus_language_written",
+          "median": 83.0,
+          "actor": "0",
+          "actor_frac": 0.443
+        },
+        {
+          "family": "stimulus_auditory",
+          "median": 71.0,
+          "actor": "0",
+          "actor_frac": 0.5
+        },
+        {
+          "family": "stimulus_language_spoken",
+          "median": 68.5,
+          "actor": "0",
+          "actor_frac": 0.5
+        },
+        {
+          "family": "feedback_penalty",
+          "median": 50.5,
+          "actor": "0",
+          "actor_frac": 0.537
+        },
+        {
+          "family": "satmap_icon_added",
+          "median": 41.0,
+          "actor": "0",
+          "actor_frac": 1.0
+        },
+        {
+          "family": "feedback_reward_points",
+          "median": 38.0,
+          "actor": "1",
+          "actor_frac": 0.527
+        },
+        {
+          "family": "auditory_feedback_reward",
+          "median": 34.0,
+          "actor": "1",
+          "actor_frac": 0.554
+        },
+        {
+          "family": "query_issue_focused",
+          "median": 23.0,
+          "actor": "0",
+          "actor_frac": 0.529
+        }
+      ]
+    },
+    "coop-movetogether": {
+      "type": "coop-movetogether",
+      "condition": "cooperative",
+      "gloss": "Both drive. The checkpoint advances only when both arrive.",
+      "symmetric": true,
+      "n_instances": 200,
+      "signature": [
+        {
+          "family": "stimulus_curbside",
+          "median": 84.0,
+          "min": 37,
+          "max": 142,
+          "actor": "1",
+          "actor_frac": 0.51
+        },
+        {
+          "family": "hint",
+          "median": 8.0,
+          "min": 1,
+          "max": 41,
+          "actor": "both",
+          "actor_frac": 1.0
+        },
+        {
+          "family": "checkpoint_move",
+          "median": 7.0,
+          "min": 6,
+          "max": 8,
+          "actor": "both",
+          "actor_frac": 1.0
+        },
+        {
+          "family": "checkpoint_reached",
+          "median": 7.0,
+          "min": 6,
+          "max": 8,
+          "actor": "both",
+          "actor_frac": 1.0
+        },
+        {
+          "family": "checkpoint_created",
+          "median": 1.0,
+          "min": 1,
+          "max": 1,
+          "actor": "both",
+          "actor_frac": 1.0
+        }
+      ],
+      "common": [
+        {
+          "family": "response_speech_ignored",
+          "median": 225.0,
+          "actor": "0",
+          "actor_frac": 0.535
+        },
+        {
+          "family": "query_created",
+          "median": 157.0,
+          "actor": "0",
+          "actor_frac": 0.503
+        },
+        {
+          "family": "stimulus_language_written",
+          "median": 84.0,
+          "actor": "1",
+          "actor_frac": 0.401
+        },
+        {
+          "family": "satmap_icon_added",
+          "median": 75.0,
+          "actor": "0",
+          "actor_frac": 0.501
+        },
+        {
+          "family": "feedback_penalty",
+          "median": 65.5,
+          "actor": "0",
+          "actor_frac": 0.505
+        },
+        {
+          "family": "stimulus_auditory",
+          "median": 65.0,
+          "actor": "1",
+          "actor_frac": 0.501
+        },
+        {
+          "family": "stimulus_language_spoken",
+          "median": 65.0,
+          "actor": "0",
+          "actor_frac": 0.502
+        },
+        {
+          "family": "feedback_reward_points",
+          "median": 36.0,
+          "actor": "0",
+          "actor_frac": 0.51
+        },
+        {
+          "family": "auditory_feedback_reward",
+          "median": 30.0,
+          "actor": "0",
+          "actor_frac": 0.511
+        },
+        {
+          "family": "query_issue_focused",
+          "median": 25.0,
+          "actor": "0",
+          "actor_frac": 0.516
+        }
+      ]
+    },
+    "coop-secureperimeter": {
+      "type": "coop-secureperimeter",
+      "condition": "cooperative",
+      "gloss": "Both defend a perimeter against approaching invaders.",
+      "symmetric": true,
+      "n_instances": 134,
+      "signature": [
+        {
+          "family": "agent_invader_wait",
+          "median": 58.0,
+          "min": 32,
+          "max": 96,
+          "actor": "both",
+          "actor_frac": 1.0
+        },
+        {
+          "family": "agent_invader_approach",
+          "median": 47.0,
+          "min": 22,
+          "max": 87,
+          "actor": "both",
+          "actor_frac": 1.0
+        },
+        {
+          "family": "hint",
+          "median": 27.0,
+          "min": 6,
+          "max": 48,
+          "actor": "both",
+          "actor_frac": 1.0
+        },
+        {
+          "family": "agent_invader_retreat",
+          "median": 17.0,
+          "min": 2,
+          "max": 36,
+          "actor": "both",
+          "actor_frac": 1.0
+        },
+        {
+          "family": "feedback_reward_on_accuracy",
+          "median": 15.0,
+          "min": 2,
+          "max": 32,
+          "actor": "both",
+          "actor_frac": 1.0
+        },
+        {
+          "family": "agent_invader_added",
+          "median": 7.0,
+          "min": 7,
+          "max": 7,
+          "actor": "both",
+          "actor_frac": 1.0
+        }
+      ],
+      "common": [
+        {
+          "family": "response_speech_ignored",
+          "median": 136.0,
+          "actor": "0",
+          "actor_frac": 0.565
+        },
+        {
+          "family": "query_created",
+          "median": 107.0,
+          "actor": "1",
+          "actor_frac": 0.503
+        },
+        {
+          "family": "response_button",
+          "median": 87.0,
+          "actor": "both",
+          "actor_frac": 0.925
+        },
+        {
+          "family": "feedback_penalty",
+          "median": 80.0,
+          "actor": "0",
+          "actor_frac": 0.505
+        },
+        {
+          "family": "stimulus_language_written",
+          "median": 70.0,
+          "actor": "0",
+          "actor_frac": 0.346
+        },
+        {
+          "family": "feedback_reward_points",
+          "median": 60.0,
+          "actor": "1",
+          "actor_frac": 0.502
+        },
+        {
+          "family": "satmap_icon_added",
+          "median": 55.0,
+          "actor": "1",
+          "actor_frac": 0.505
+        },
+        {
+          "family": "stimulus_auditory",
+          "median": 47.0,
+          "actor": "0",
+          "actor_frac": 0.5
+        },
+        {
+          "family": "stimulus_language_spoken",
+          "median": 46.0,
+          "actor": "0",
+          "actor_frac": 0.5
+        },
+        {
+          "family": "controller_button",
+          "median": 19.0,
+          "actor": "0",
+          "actor_frac": 0.523
+        }
+      ]
+    },
+    "coop-vehicle-aerial": {
+      "type": "coop-vehicle-aerial",
+      "condition": "cooperative",
+      "gloss": "Participant 0 takes the ground vehicle, participant 1 the aerial.",
+      "symmetric": false,
+      "n_instances": 248,
+      "signature": [
+        {
+          "family": "stimulus_curbside",
+          "median": 42.0,
+          "min": 13,
+          "max": 86,
+          "actor": "0",
+          "actor_frac": 0.968
+        },
+        {
+          "family": "agent_wanderer_added",
+          "median": 10.0,
+          "min": 10,
+          "max": 10,
+          "actor": "both",
+          "actor_frac": 1.0
+        },
+        {
+          "family": "checkpoint_move",
+          "median": 7.0,
+          "min": 6,
+          "max": 8,
+          "actor": "both",
+          "actor_frac": 1.0
+        },
+        {
+          "family": "checkpoint_reached",
+          "median": 7.0,
+          "min": 6,
+          "max": 8,
+          "actor": "both",
+          "actor_frac": 1.0
+        },
+        {
+          "family": "checkpoint_created",
+          "median": 1.0,
+          "min": 1,
+          "max": 1,
+          "actor": "both",
+          "actor_frac": 1.0
+        }
+      ],
+      "common": [
+        {
+          "family": "response_speech_ignored",
+          "median": 263.0,
+          "actor": "0",
+          "actor_frac": 0.517
+        },
+        {
+          "family": "query_created",
+          "median": 120.0,
+          "actor": "1",
+          "actor_frac": 0.65
+        },
+        {
+          "family": "stimulus_language_written",
+          "median": 78.0,
+          "actor": "1",
+          "actor_frac": 0.443
+        },
+        {
+          "family": "stimulus_auditory",
+          "median": 67.0,
+          "actor": "1",
+          "actor_frac": 0.5
+        },
+        {
+          "family": "stimulus_language_spoken",
+          "median": 65.0,
+          "actor": "0",
+          "actor_frac": 0.501
+        },
+        {
+          "family": "feedback_penalty",
+          "median": 50.0,
+          "actor": "1",
+          "actor_frac": 0.524
+        },
+        {
+          "family": "satmap_icon_added",
+          "median": 38.5,
+          "actor": "1",
+          "actor_frac": 1.0
+        },
+        {
+          "family": "feedback_reward_points",
+          "median": 38.0,
+          "actor": "0",
+          "actor_frac": 0.504
+        },
+        {
+          "family": "auditory_feedback_reward",
+          "median": 32.0,
+          "actor": "1",
+          "actor_frac": 0.505
+        },
+        {
+          "family": "query_issue_focused",
+          "median": 24.0,
+          "actor": "1",
+          "actor_frac": 0.537
+        }
+      ]
+    },
+    "indiv-drive-watch": {
+      "type": "indiv-drive-watch",
+      "condition": "individual",
+      "gloss": "Participant 0 drives the checkpoint route; participant 1 watches.",
+      "symmetric": false,
+      "n_instances": 258,
+      "signature": [
+        {
+          "family": "stimulus_curbside",
+          "median": 39.0,
+          "min": 8,
+          "max": 89,
+          "actor": "0",
+          "actor_frac": 0.999
+        },
+        {
+          "family": "checkpoint_move",
+          "median": 7.0,
+          "min": 6,
+          "max": 8,
+          "actor": "both",
+          "actor_frac": 1.0
+        },
+        {
+          "family": "checkpoint_reached",
+          "median": 7.0,
+          "min": 6,
+          "max": 8,
+          "actor": "both",
+          "actor_frac": 1.0
+        },
+        {
+          "family": "checkpoint_created",
+          "median": 1.0,
+          "min": 1,
+          "max": 1,
+          "actor": "both",
+          "actor_frac": 1.0
+        }
+      ],
+      "common": [
+        {
+          "family": "response_speech_ignored",
+          "median": 145.0,
+          "actor": "0",
+          "actor_frac": 0.573
+        },
+        {
+          "family": "query_created",
+          "median": 133.0,
+          "actor": "0",
+          "actor_frac": 0.505
+        },
+        {
+          "family": "satmap_icon_added",
+          "median": 66.0,
+          "actor": "0",
+          "actor_frac": 0.502
+        },
+        {
+          "family": "stimulus_language_written",
+          "median": 59.0,
+          "actor": "0",
+          "actor_frac": 0.492
+        },
+        {
+          "family": "stimulus_auditory",
+          "median": 56.0,
+          "actor": "0",
+          "actor_frac": 0.5
+        },
+        {
+          "family": "stimulus_language_spoken",
+          "median": 55.0,
+          "actor": "0",
+          "actor_frac": 0.503
+        },
+        {
+          "family": "feedback_reward_points",
+          "median": 40.0,
+          "actor": "1",
+          "actor_frac": 0.515
+        },
+        {
+          "family": "auditory_feedback_reward",
+          "median": 38.0,
+          "actor": "1",
+          "actor_frac": 0.612
+        },
+        {
+          "family": "feedback_penalty",
+          "median": 30.0,
+          "actor": "0",
+          "actor_frac": 0.628
+        },
+        {
+          "family": "query_issue_focused",
+          "median": 23.0,
+          "actor": "1",
+          "actor_frac": 0.562
+        }
+      ]
+    },
+    "indiv-pan-watch": {
+      "type": "indiv-pan-watch",
+      "condition": "individual",
+      "gloss": "Participant 0 works the panoramic camera; participant 1 watches.",
+      "symmetric": false,
+      "n_instances": 168,
+      "signature": [
+        {
+          "family": "pancam_agent_visible",
+          "median": 46.5,
+          "min": 17,
+          "max": 212,
+          "actor": "0",
+          "actor_frac": 1.0
+        },
+        {
+          "family": "pancam_reported",
+          "median": 21.0,
+          "min": 7,
+          "max": 42,
+          "actor": "0",
+          "actor_frac": 1.0
+        },
+        {
+          "family": "agent_wanderer_added",
+          "median": 7.0,
+          "min": 7,
+          "max": 7,
+          "actor": "both",
+          "actor_frac": 1.0
+        },
+        {
+          "family": "pancam_false_report",
+          "median": 4.0,
+          "min": 1,
+          "max": 9,
+          "actor": "0",
+          "actor_frac": 1.0
+        }
+      ],
+      "common": [
+        {
+          "family": "response_speech_ignored",
+          "median": 146.0,
+          "actor": "0",
+          "actor_frac": 0.571
+        },
+        {
+          "family": "query_created",
+          "median": 130.5,
+          "actor": "1",
+          "actor_frac": 0.502
+        },
+        {
+          "family": "satmap_icon_added",
+          "median": 64.5,
+          "actor": "0",
+          "actor_frac": 0.504
+        },
+        {
+          "family": "stimulus_language_written",
+          "median": 59.0,
+          "actor": "0",
+          "actor_frac": 0.487
+        },
+        {
+          "family": "auditory_feedback_reward",
+          "median": 57.5,
+          "actor": "0",
+          "actor_frac": 0.612
+        },
+        {
+          "family": "feedback_reward_points",
+          "median": 57.0,
+          "actor": "0",
+          "actor_frac": 0.672
+        },
+        {
+          "family": "stimulus_auditory",
+          "median": 56.0,
+          "actor": "1",
+          "actor_frac": 0.501
+        },
+        {
+          "family": "stimulus_language_spoken",
+          "median": 55.0,
+          "actor": "1",
+          "actor_frac": 0.5
+        },
+        {
+          "family": "feedback_penalty",
+          "median": 32.0,
+          "actor": "0",
+          "actor_frac": 0.641
+        },
+        {
+          "family": "query_issue_focused",
+          "median": 23.0,
+          "actor": "1",
+          "actor_frac": 0.554
+        }
+      ]
+    },
+    "indiv-watch-drive": {
+      "type": "indiv-watch-drive",
+      "condition": "individual",
+      "gloss": "Roles swapped: participant 1 drives.",
+      "symmetric": false,
+      "n_instances": 136,
+      "signature": [
+        {
+          "family": "stimulus_curbside",
+          "median": 37.0,
+          "min": 13,
+          "max": 78,
+          "actor": "1",
+          "actor_frac": 0.997
+        },
+        {
+          "family": "checkpoint_move",
+          "median": 7.0,
+          "min": 6,
+          "max": 8,
+          "actor": "both",
+          "actor_frac": 1.0
+        },
+        {
+          "family": "checkpoint_reached",
+          "median": 7.0,
+          "min": 6,
+          "max": 8,
+          "actor": "both",
+          "actor_frac": 1.0
+        },
+        {
+          "family": "checkpoint_created",
+          "median": 1.0,
+          "min": 1,
+          "max": 1,
+          "actor": "both",
+          "actor_frac": 1.0
+        }
+      ],
+      "common": [
+        {
+          "family": "response_speech_ignored",
+          "median": 145.0,
+          "actor": "0",
+          "actor_frac": 0.558
+        },
+        {
+          "family": "query_created",
+          "median": 125.0,
+          "actor": "1",
+          "actor_frac": 0.508
+        },
+        {
+          "family": "satmap_icon_added",
+          "median": 61.0,
+          "actor": "1",
+          "actor_frac": 0.502
+        },
+        {
+          "family": "stimulus_language_written",
+          "median": 57.0,
+          "actor": "1",
+          "actor_frac": 0.491
+        },
+        {
+          "family": "stimulus_auditory",
+          "median": 53.0,
+          "actor": "1",
+          "actor_frac": 0.501
+        },
+        {
+          "family": "stimulus_language_spoken",
+          "median": 53.0,
+          "actor": "0",
+          "actor_frac": 0.501
+        },
+        {
+          "family": "auditory_feedback_reward",
+          "median": 40.0,
+          "actor": "0",
+          "actor_frac": 0.605
+        },
+        {
+          "family": "feedback_reward_points",
+          "median": 35.0,
+          "actor": "1",
+          "actor_frac": 0.506
+        },
+        {
+          "family": "feedback_penalty",
+          "median": 30.0,
+          "actor": "1",
+          "actor_frac": 0.578
+        },
+        {
+          "family": "query_issue_focused",
+          "median": 22.0,
+          "actor": "0",
+          "actor_frac": 0.574
+        }
+      ]
+    },
+    "indiv-watch-pan": {
+      "type": "indiv-watch-pan",
+      "condition": "individual",
+      "gloss": "Roles swapped: participant 1 works the panoramic camera.",
+      "symmetric": false,
+      "n_instances": 200,
+      "signature": [
+        {
+          "family": "pancam_agent_visible",
+          "median": 43.0,
+          "min": 4,
+          "max": 141,
+          "actor": "1",
+          "actor_frac": 1.0
+        },
+        {
+          "family": "pancam_reported",
+          "median": 17.5,
+          "min": 1,
+          "max": 43,
+          "actor": "1",
+          "actor_frac": 1.0
+        },
+        {
+          "family": "agent_wanderer_added",
+          "median": 7.0,
+          "min": 7,
+          "max": 7,
+          "actor": "both",
+          "actor_frac": 1.0
+        },
+        {
+          "family": "pancam_false_report",
+          "median": 4.0,
+          "min": 1,
+          "max": 13,
+          "actor": "1",
+          "actor_frac": 1.0
+        },
+        {
+          "family": "pancam_doubly_reported",
+          "median": 3.0,
+          "min": 1,
+          "max": 19,
+          "actor": "1",
+          "actor_frac": 1.0
+        }
+      ],
+      "common": [
+        {
+          "family": "response_speech_ignored",
+          "median": 146.0,
+          "actor": "0",
+          "actor_frac": 0.575
+        },
+        {
+          "family": "query_created",
+          "median": 129.0,
+          "actor": "0",
+          "actor_frac": 0.506
+        },
+        {
+          "family": "satmap_icon_added",
+          "median": 64.0,
+          "actor": "0",
+          "actor_frac": 0.505
+        },
+        {
+          "family": "auditory_feedback_reward",
+          "median": 63.5,
+          "actor": "1",
+          "actor_frac": 0.649
+        },
+        {
+          "family": "stimulus_language_written",
+          "median": 58.5,
+          "actor": "1",
+          "actor_frac": 0.488
+        },
+        {
+          "family": "stimulus_auditory",
+          "median": 56.0,
+          "actor": "0",
+          "actor_frac": 0.5
+        },
+        {
+          "family": "feedback_reward_points",
+          "median": 54.5,
+          "actor": "1",
+          "actor_frac": 0.69
+        },
+        {
+          "family": "stimulus_language_spoken",
+          "median": 54.0,
+          "actor": "1",
+          "actor_frac": 0.502
+        },
+        {
+          "family": "feedback_penalty",
+          "median": 33.0,
+          "actor": "1",
+          "actor_frac": 0.627
+        },
+        {
+          "family": "auditory_feedback_penalty",
+          "median": 28.0,
+          "actor": "1",
+          "actor_frac": 0.72
+        }
+      ]
+    }
+  }
+}

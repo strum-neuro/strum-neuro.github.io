@@ -1,0 +1,336 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>STRUM — a dyadic multimodal neuroergonomics dataset</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="STRUM: two participants perform a cooperative urban-reconnaissance task while dual high-density EEG, EMG, eye tracking, motion capture and force are recorded on one clock. SCCN, UC San Diego / ARL.">
+<style>
+/* Palette and type match the two explorer pages so the site reads as one thing. */
+:root{
+  --bg:#f5f7f9; --surface:#ffffff; --surface-2:#eef1f5; --border:#dce1e8;
+  --ink:#151b23; --muted:#5c6675; --faint:#c8d0da;
+  --accent:#0f766e; --accent-bright:#0d9488; --accent-weak:#d8efe9;
+  --delta:#1f6bb5; --delta-weak:#e3eefb;
+  --echo:#a8501f;  --echo-weak:#fbeade;
+  --shadow:0 1px 2px rgba(20,28,40,.06),0 8px 24px rgba(20,28,40,.06);
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#0c0f14; --surface:#141a21; --surface-2:#1b222b; --border:#27303b;
+    --ink:#e6ebf1; --muted:#8893a2; --faint:#39434f;
+    --accent:#2dd4bf; --accent-bright:#5eead4; --accent-weak:#123531;
+    --delta:#7fb4ec; --delta-weak:#152435;
+    --echo:#eda173;  --echo-weak:#33200f;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 12px 30px rgba(0,0,0,.35);
+  }
+}
+:root[data-theme="light"]{
+  --bg:#f5f7f9; --surface:#ffffff; --surface-2:#eef1f5; --border:#dce1e8;
+  --ink:#151b23; --muted:#5c6675; --faint:#c8d0da;
+  --accent:#0f766e; --accent-bright:#0d9488; --accent-weak:#d8efe9;
+  --delta:#1f6bb5; --delta-weak:#e3eefb; --echo:#a8501f; --echo-weak:#fbeade;
+  --shadow:0 1px 2px rgba(20,28,40,.06),0 8px 24px rgba(20,28,40,.06);
+}
+:root[data-theme="dark"]{
+  --bg:#0c0f14; --surface:#141a21; --surface-2:#1b222b; --border:#27303b;
+  --ink:#e6ebf1; --muted:#8893a2; --faint:#39434f;
+  --accent:#2dd4bf; --accent-bright:#5eead4; --accent-weak:#123531;
+  --delta:#7fb4ec; --delta-weak:#152435; --echo:#eda173; --echo-weak:#33200f;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 12px 30px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);
+  line-height:1.55;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1080px;margin:0 auto;padding:34px 24px 90px}
+h1,h2,h3{margin:0;text-wrap:balance}
+a{color:var(--accent-bright)}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--accent);font-weight:600}
+.themebtn{position:fixed;top:16px;right:16px;z-index:40;font-family:var(--mono);font-size:12px;
+  background:var(--surface);color:var(--muted);border:1px solid var(--border);border-radius:8px;
+  padding:7px 11px;cursor:pointer;box-shadow:var(--shadow)}
+.themebtn:hover{color:var(--ink);border-color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+
+/* ---- hero ---------------------------------------------------------------- */
+header.top{padding-bottom:8px}
+header.top h1{font-size:clamp(28px,4.4vw,44px);font-weight:680;letter-spacing:-.025em;margin:9px 0 0}
+header.top h1 em{font-style:normal;color:var(--accent)}
+header.top p.lede{margin:14px 0 0;color:var(--muted);max-width:64ch;font-size:16px}
+
+/* The signature: one session, drawn to scale, as two synchronised rows. Both rows are the
+   same timeline — that identity is the point, so it is shown rather than asserted. */
+.clock{margin:30px 0 8px;background:var(--surface);border:1px solid var(--border);
+  border-radius:14px;padding:18px 18px 14px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+.clock .chead{display:flex;justify-content:space-between;align-items:baseline;gap:12px;
+  flex-wrap:wrap;margin-bottom:14px}
+.clock .chead .t{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.row{display:grid;grid-template-columns:132px 1fr;gap:12px;align-items:center;margin-bottom:7px}
+.row .who{font-family:var(--mono);font-size:11.5px;display:flex;flex-direction:column;gap:1px}
+.row .who b{font-weight:640;font-size:12.5px}
+.row .who span{color:var(--muted);font-size:10px;letter-spacing:.03em}
+.row.delta .who b{color:var(--delta)} .row.echo .who b{color:var(--echo)}
+.track{display:flex;gap:3px;height:36px}
+.seg{border-radius:6px;display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:11px;font-weight:600;min-width:0;border:1px solid transparent}
+.row.delta .seg.blk{background:var(--delta-weak);border-color:var(--delta);color:var(--delta)}
+.row.echo  .seg.blk{background:var(--echo-weak); border-color:var(--echo); color:var(--echo)}
+.seg.lull{background:repeating-linear-gradient(45deg,transparent,transparent 3px,
+  var(--surface-2) 3px,var(--surface-2) 7px);border:1px dashed var(--border);flex:0 0 auto}
+.axis{display:grid;grid-template-columns:132px 1fr;gap:12px;margin-top:4px}
+.axis .ticks{position:relative;height:16px;border-top:1px solid var(--border)}
+.axis .ticks span{position:absolute;top:3px;transform:translateX(-50%);font-family:var(--mono);
+  font-size:9.5px;color:var(--muted)}
+.playhead{position:absolute;top:0;bottom:0;width:1px;background:var(--accent);opacity:0;
+  pointer-events:none}
+@media (prefers-reduced-motion:no-preference){
+  .playhead.run{animation:sweep 2.1s cubic-bezier(.4,0,.2,1) .25s 1 forwards}
+}
+@keyframes sweep{0%{left:0;opacity:.9}92%{opacity:.9}100%{left:100%;opacity:0}}
+.cnote{font-family:var(--mono);font-size:10.5px;color:var(--muted);margin-top:12px;line-height:1.65}
+
+/* ---- routes -------------------------------------------------------------- */
+.routes{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;margin-top:26px}
+.card{display:block;background:var(--surface);border:1px solid var(--border);border-radius:14px;
+  padding:18px 18px 16px;text-decoration:none;color:inherit;box-shadow:var(--shadow);transition:.14s}
+.card:hover{border-color:var(--accent);transform:translateY(-1px)}
+.card h3{font-size:17px;font-weight:640;margin:7px 0 5px;letter-spacing:-.01em}
+.card p{margin:0;color:var(--muted);font-size:13.5px}
+.card .go{font-family:var(--mono);font-size:11.5px;color:var(--accent-bright);margin-top:11px;
+  display:inline-block}
+
+/* ---- facts --------------------------------------------------------------- */
+section{margin-top:38px}
+.sechead{display:flex;align-items:baseline;gap:12px;margin-bottom:13px}
+.sechead h2{font-size:19px;font-weight:640;letter-spacing:-.01em}
+.sechead .sub{color:var(--muted);font-size:13px}
+.facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(148px,1fr));gap:11px}
+.fact{background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:13px 15px}
+.fact .n{font-family:var(--mono);font-size:23px;font-weight:600;letter-spacing:-.02em;
+  font-variant-numeric:tabular-nums}
+.fact .n small{font-size:13px;color:var(--muted);font-weight:500}
+.fact .l{font-size:12.5px;color:var(--muted);margin-top:2px}
+.mods{margin-top:12px;display:flex;flex-wrap:wrap;gap:6px}
+.mod{font-family:var(--mono);font-size:11px;border:1px solid var(--border);border-radius:20px;
+  padding:4px 10px;color:var(--muted);background:var(--surface)}
+.mod b{color:var(--ink);font-weight:600}
+
+/* ---- prose / status ------------------------------------------------------ */
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:18px 20px}
+.panel p{margin:0 0 10px;font-size:14.5px}
+.panel p:last-child{margin-bottom:0}
+.panel .cite{font-family:var(--mono);font-size:12px;color:var(--muted);border-left:2px solid var(--accent);
+  padding-left:12px;margin-top:4px}
+table.repos{width:100%;border-collapse:collapse;font-size:14px}
+table.repos td{padding:9px 10px;border-bottom:1px solid var(--border);vertical-align:top}
+table.repos tr:last-child td{border-bottom:0}
+table.repos td:first-child{white-space:nowrap;font-family:var(--mono);font-size:13px;width:1%}
+table.repos .soon{color:var(--muted);font-family:var(--mono);font-size:11px}
+footer{margin-top:44px;border-top:1px solid var(--border);padding-top:18px;color:var(--muted);
+  font-size:12.5px}
+@media (max-width:640px){
+  .row,.axis{grid-template-columns:1fr}
+  .row .who{flex-direction:row;align-items:baseline;gap:7px}
+  .axis .ticks{display:none}
+}
+</style>
+</head>
+<body>
+<button class="themebtn" id="themebtn" type="button">◐ theme</button>
+<div class="wrap">
+
+  <header class="top">
+    <div class="eyebrow">SCCN · UC San Diego · U.S. Army Research Laboratory</div>
+    <h1>Two people, one task,<br><em>one clock.</em></h1>
+    <p class="lede">STRUM records both members of a working pair at once. Two participants run a
+    cooperative urban-reconnaissance mission while a full sensor suite captures each of them —
+    dual high-density EEG, EMG, eye tracking, motion, force and the complete task event
+    timeline — all on a single Lab Streaming Layer clock.</p>
+  </header>
+
+  <!-- Signature element: a real session, to scale. Both rows are the same timeline. -->
+  <div class="clock" id="clock">
+    <div class="playhead" id="playhead"></div>
+    <div class="chead">
+      <div class="eyebrow">One session, to scale</div>
+      <div class="t" id="ctotal"></div>
+    </div>
+    <div class="row delta">
+      <div class="who"><b>Delta</b><span>207ch EEG &middot; 43ch EMG</span></div>
+      <div class="track" id="trackA"></div>
+    </div>
+    <div class="row echo">
+      <div class="who"><b>Echo</b><span>207ch EEG &middot; 43ch EMG</span></div>
+      <div class="track" id="trackB"></div>
+    </div>
+    <div class="axis"><div></div><div class="ticks" id="ticks"></div></div>
+    <p class="cnote">Five blocks of missions, separated by four rest lulls of about three minutes.
+    The two rows are identical because they are the same timeline — one event stream describes
+    both participants, which is what makes the pair analysable as a pair. Widths are median
+    durations measured across all 33 sessions.</p>
+  </div>
+
+  <div class="routes">
+    <a class="card" href="explorer/">
+      <div class="eyebrow">Explore</div>
+      <h3>Session explorer</h3>
+      <p>What every session and participant actually contains: modality coverage, EEG montage
+      variants, delivered block structure, and inter-brain clock alignment. Filterable, with the
+      whole inventory downloadable as JSON.</p>
+      <span class="go">Open the explorer →</span>
+    </a>
+    <a class="card" href="structure/">
+      <div class="eyebrow">Understand</div>
+      <h3>Experiment structure</h3>
+      <p>The task itself, drawn to scale. Pick a block, then a mission, and see what the task
+      emits inside it — which events identify that mission, and which participant they belong to.</p>
+      <span class="go">Open the structure view →</span>
+    </a>
+  </div>
+
+  <section>
+    <div class="sechead"><h2>What was recorded</h2>
+      <span class="sub">counts are participants with that modality present in the released tree</span></div>
+    <div class="facts">
+      <div class="fact"><div class="n">66</div><div class="l">participants</div></div>
+      <div class="fact"><div class="n">33</div><div class="l">dyads</div></div>
+      <div class="fact"><div class="n">40</div><div class="l">recordings</div></div>
+      <div class="fact"><div class="n">2.8 <small>h</small></div><div class="l">median session</div></div>
+      <div class="fact"><div class="n">25</div><div class="l">missions per session</div></div>
+    </div>
+    <div class="mods">
+      <span class="mod">EEG <b>66</b></span>
+      <span class="mod">EMG neckband <b>64</b></span>
+      <span class="mod">Motion capture <b>66</b></span>
+      <span class="mod">In-game pose <b>66</b></span>
+      <span class="mod">Task events <b>66</b></span>
+      <span class="mod">Game controller <b>63</b></span>
+      <span class="mod">Force plate <b>57</b></span>
+      <span class="mod">Eye tracking <b>43</b></span>
+    </div>
+  </section>
+
+  <section>
+    <div class="sechead"><h2>Why a pair</h2></div>
+    <div class="panel">
+      <p>Most recordings of cognitive workload capture one brain at a time. STRUM captures two, doing
+      the work together, on a shared clock — so the questions it can answer are about the pair:
+      how coupling changes during joint action, how load is split between teammates, and how
+      cooperative phases differ from role-split ones within the same session.</p>
+      <p>The task helps. Every session ran the same five blocks and the same 25 missions, in the same
+      order — not by convention but by construction, since the schedule is generated from a fixed
+      seed in the experiment software. Blocks, missions and rest periods are therefore directly
+      comparable across all 33 pairs, and the inter-block lulls give a rest baseline that costs no
+      extra recording time.</p>
+    </div>
+  </section>
+
+  <section>
+    <div class="sechead"><h2>Status</h2></div>
+    <div class="panel">
+      <p>The dataset is complete and BIDS-valid (0 errors, <code>@bids/validator</code> 3.0.1).
+      Public release on OpenNeuro / NEMAR is in preparation, and a data paper is in progress. This
+      page will link the dataset and its DOI as soon as they exist.</p>
+      <p>Until then, cite the original paper:</p>
+      <p class="cite">T. Mullen, C. Kothe &amp; S. Makeig. STRUM: A New Dataset for Neuroergonomics
+      Research. 2018 IEEE International Conference on Systems, Man, and Cybernetics (SMC), 77–82.
+      <a href="https://doi.org/10.1109/SMC.2018.00023">doi:10.1109/SMC.2018.00023</a></p>
+    </div>
+  </section>
+
+  <section>
+    <div class="sechead"><h2>Code</h2>
+      <span class="sub">github.com/strum-neuro</span></div>
+    <div class="panel">
+      <table class="repos">
+        <tr>
+          <td>strum-bids</td>
+          <td>Conversion of the raw LSL/XDF recordings into a valid BIDS dataset, including HED
+            event annotation. <span class="soon">public at release</span></td>
+        </tr>
+        <tr>
+          <td>experiment-software</td>
+          <td>The task software that ran the study — an archival copy of SCCN's SNAP framework and
+            its LSE experiment module, documented and verified against the recordings.
+            <span class="soon">public at release</span></td>
+        </tr>
+        <tr>
+          <td>starter pack</td>
+          <td>Worked examples for loading the dataset: pairing the two members of a dyad, and
+            segmenting by block, mission or lull. <span class="soon">planned</span></td>
+        </tr>
+      </table>
+    </div>
+  </section>
+
+  <footer>
+    Collected under U.S. Army Research Laboratory Cooperative Agreement W911NF-10-2-0022.
+    Every figure on this page is measured from the recordings, not quoted from a protocol document.
+  </footer>
+</div>
+
+<script>
+// One real session, to scale. Medians measured across all 33 sessions
+// (viz/build_structure.py in the conversion repo).
+const BLOCKS = [
+  {name:"A", s:2292.2, missions:6},
+  {name:"B", s:1596.9, missions:4},
+  {name:"C", s:2181.6, missions:6},
+  {name:"D", s:1871.7, missions:5},
+  {name:"E", s:1409.3, missions:4}
+];
+const LULL = 182.6;
+const TOTAL = BLOCKS.reduce((a,b)=>a+b.s,0) + LULL*(BLOCKS.length-1);
+
+const mins = s => Math.round(s/60);
+document.getElementById("ctotal").textContent =
+  `${BLOCKS.length} blocks · ${BLOCKS.length-1} lulls · ${(TOTAL/3600).toFixed(1)} h median`;
+
+// Percentages are of the track width, but flex gaps sit on top of them — without this the
+// last block is pushed past the right edge. Give back each segment its share of the gaps.
+const GAP = 3, N_SEG = BLOCKS.length*2 - 1, SHRINK = (GAP*(N_SEG-1)/N_SEG).toFixed(2);
+
+function fill(el){
+  let html = "";
+  BLOCKS.forEach((b,i)=>{
+    const w = (b.s/TOTAL*100).toFixed(3);
+    html += `<div class="seg blk" style="flex:0 0 calc(${w}% - ${SHRINK}px)"
+      title="block ${b.name} · ${b.missions} missions · ${mins(b.s)} min">${b.name}</div>`;
+    if(i < BLOCKS.length-1){
+      const lw = (LULL/TOTAL*100).toFixed(3);
+      html += `<div class="seg lull" style="flex:0 0 calc(${lw}% - ${SHRINK}px)"
+        title="rest lull · ${mins(LULL)} min"></div>`;
+    }
+  });
+  el.innerHTML = html;
+}
+fill(document.getElementById("trackA"));
+fill(document.getElementById("trackB"));
+
+// half-hour ticks along the shared axis
+(function(){
+  const t = document.getElementById("ticks");
+  let html = "";
+  for(let s=0; s<=TOTAL; s+=1800){
+    html += `<span style="left:${(s/TOTAL*100).toFixed(2)}%">${(s/3600).toFixed(1)}h</span>`;
+  }
+  t.innerHTML = html;
+})();
+
+// A single sweep on load: one clock, running once. Skipped under reduced motion by the CSS.
+requestAnimationFrame(()=>document.getElementById("playhead").classList.add("run"));
+
+(function(){
+  const btn = document.getElementById("themebtn");
+  const sys = matchMedia("(prefers-color-scheme:dark)").matches ? "dark" : "light";
+  let t = localStorage.getItem("strum-theme") || sys;
+  const apply = ()=>document.documentElement.setAttribute("data-theme", t);
+  apply();
+  btn.onclick = ()=>{ t = t==="dark"?"light":"dark"; localStorage.setItem("strum-theme",t); apply(); };
+})();
+</script>
+</body>
+</html>

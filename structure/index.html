@@ -1,0 +1,334 @@
+<meta charset="utf-8">
+<title>STRUM experiment structure</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+:root{
+  --bg:#f5f7f9; --surface:#ffffff; --surface-2:#eef1f5; --border:#dce1e8;
+  --ink:#151b23; --muted:#5c6675; --faint:#c8d0da;
+  --accent:#0f766e; --accent-bright:#0d9488; --accent-weak:#d8efe9;
+  --indiv:#7c8798; --indiv-weak:#e7eaee;
+  --warn:#c0862a; --warn-weak:#f6ecd6;
+  --shadow:0 1px 2px rgba(20,28,40,.06),0 8px 24px rgba(20,28,40,.06);
+  --mono:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,"Liberation Mono",monospace;
+  --sans:system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#0c0f14; --surface:#141a21; --surface-2:#1b222b; --border:#27303b;
+    --ink:#e6ebf1; --muted:#8893a2; --faint:#39434f;
+    --accent:#2dd4bf; --accent-bright:#5eead4; --accent-weak:#123531;
+    --indiv:#7e8b9c; --indiv-weak:#222a34;
+    --warn:#e0a94a; --warn-weak:#332711;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 12px 30px rgba(0,0,0,.35);
+  }
+}
+:root[data-theme="light"]{
+  --bg:#f5f7f9; --surface:#ffffff; --surface-2:#eef1f5; --border:#dce1e8;
+  --ink:#151b23; --muted:#5c6675; --faint:#c8d0da;
+  --accent:#0f766e; --accent-bright:#0d9488; --accent-weak:#d8efe9;
+  --indiv:#7c8798; --indiv-weak:#e7eaee; --warn:#c0862a; --warn-weak:#f6ecd6;
+  --shadow:0 1px 2px rgba(20,28,40,.06),0 8px 24px rgba(20,28,40,.06);
+}
+:root[data-theme="dark"]{
+  --bg:#0c0f14; --surface:#141a21; --surface-2:#1b222b; --border:#27303b;
+  --ink:#e6ebf1; --muted:#8893a2; --faint:#39434f;
+  --accent:#2dd4bf; --accent-bright:#5eead4; --accent-weak:#123531;
+  --indiv:#7e8b9c; --indiv-weak:#222a34; --warn:#e0a94a; --warn-weak:#332711;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 12px 30px rgba(0,0,0,.35);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.5;
+  -webkit-font-smoothing:antialiased}
+.wrap{max-width:1120px;margin:0 auto;padding:32px 24px 90px}
+h1,h2,h3{margin:0;text-wrap:balance}
+.eyebrow{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--accent);font-weight:600}
+header.top{border-bottom:1px solid var(--border);padding-bottom:22px;margin-bottom:24px}
+header.top h1{font-size:30px;font-weight:680;letter-spacing:-.02em;margin:8px 0 6px}
+header.top p{margin:0;color:var(--muted);max-width:70ch;font-size:15px}
+.themebtn{position:fixed;top:16px;right:16px;z-index:40;font-family:var(--mono);font-size:12px;
+  background:var(--surface);color:var(--muted);border:1px solid var(--border);border-radius:8px;
+  padding:7px 11px;cursor:pointer;box-shadow:var(--shadow)}
+.themebtn:hover{color:var(--ink);border-color:var(--accent)}
+
+/* session strip */
+.strip{background:var(--surface);border:1px solid var(--border);border-radius:12px;
+  padding:14px 16px;margin-bottom:22px}
+.strip h2{font-size:14px;font-weight:640}
+.strip .sub{font-family:var(--mono);font-size:11px;color:var(--muted);margin-bottom:10px}
+.sessbar{display:flex;gap:3px;align-items:stretch;height:42px}
+.sessbar button{font:inherit;border:1px solid var(--border);border-radius:7px;cursor:pointer;
+  background:var(--surface-2);color:var(--muted);font-family:var(--mono);font-size:12px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;padding:0;
+  transition:.12s;min-width:0}
+.sessbar button:hover{border-color:var(--accent);color:var(--ink)}
+.sessbar button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.sessbar button b{font-size:12.5px;font-weight:640}
+.sessbar button i{font-style:normal;font-size:9.5px;opacity:.85}
+.sessbar .lullseg{flex:0 0 var(--lw);background:repeating-linear-gradient(45deg,transparent,
+  transparent 3px,var(--surface-2) 3px,var(--surface-2) 7px);border:1px dashed var(--border);
+  border-radius:7px;display:flex;align-items:center;justify-content:center;
+  font-family:var(--mono);font-size:9px;color:var(--muted)}
+
+/* block panel */
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:14px;
+  padding:20px 20px 18px;box-shadow:var(--shadow)}
+.phead{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:2px}
+.phead h2{font-size:22px;font-weight:660;letter-spacing:-.01em}
+.phead .meta{font-family:var(--mono);font-size:12px;color:var(--muted)}
+.axis{position:relative;height:18px;margin:16px 0 2px;border-bottom:1px solid var(--border)}
+.axis span{position:absolute;top:0;transform:translateX(-50%);font-family:var(--mono);
+  font-size:10px;color:var(--muted)}
+.axis span::after{content:"";position:absolute;left:50%;bottom:-5px;width:1px;height:5px;
+  background:var(--border)}
+.tl{position:relative;margin-top:10px}
+.mis{position:relative;height:44px;margin-bottom:7px}
+.mis .bar{position:absolute;top:0;height:44px;border-radius:8px;border:1px solid transparent;
+  cursor:pointer;display:flex;flex-direction:column;justify-content:center;padding:0 10px;
+  overflow:hidden;transition:.12s}
+.mis .bar.coop{background:var(--accent-weak);border-color:var(--accent)}
+.mis .bar.indiv{background:var(--indiv-weak);border-color:var(--indiv)}
+.mis .bar:hover{filter:brightness(1.04)}
+.mis .bar[aria-pressed="true"]{outline:2px solid var(--ink);outline-offset:1px}
+.mis .bar .nm{font-family:var(--mono);font-size:11.5px;font-weight:600;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis}
+.mis .bar.coop .nm{color:var(--accent)}
+.mis .bar.indiv .nm{color:var(--muted)}
+.mis .bar .tm{font-family:var(--mono);font-size:9.5px;color:var(--muted);white-space:nowrap}
+.mis .rng{position:absolute;top:19px;height:6px;border-left:1px solid var(--faint);
+  border-right:1px solid var(--faint);pointer-events:none}
+.mis .rng::before{content:"";position:absolute;top:2.5px;left:0;right:0;height:1px;background:var(--faint)}
+.pnote{font-family:var(--mono);font-size:10.5px;color:var(--muted);margin-top:12px;line-height:1.6}
+
+/* detail */
+.detail{margin-top:16px;border-top:1px solid var(--border);padding-top:14px}
+.detail h3{font-size:16px;font-weight:640;letter-spacing:-.01em}
+.dgloss{color:var(--muted);font-size:13.5px;margin:4px 0 12px;max-width:74ch}
+.roles{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px}
+.role{border:1px solid var(--border);border-radius:8px;padding:7px 11px;background:var(--surface-2);
+  font-size:12.5px;flex:1;min-width:210px}
+.role b{font-family:var(--mono);font-size:11px;color:var(--accent);display:block}
+.role span{color:var(--muted);font-size:11.5px}
+.evgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:16px}
+.evcol h4{font-family:var(--mono);font-size:10.5px;letter-spacing:.11em;text-transform:uppercase;
+  color:var(--muted);font-weight:600;margin:0 0 7px}
+.ev{display:grid;grid-template-columns:1fr auto auto;gap:8px;align-items:baseline;
+  padding:3px 0;border-bottom:1px dotted var(--border);font-family:var(--mono);font-size:11.5px}
+.ev .f{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ev .c{color:var(--ink);font-variant-numeric:tabular-nums}
+.ev .a{font-size:9.5px;padding:0 5px;border-radius:4px;background:var(--surface-2);color:var(--muted)}
+.ev .a.p0{color:#1f6bb5;background:#e3eefb} .ev .a.p1{color:#a8501f;background:#fbeade}
+.ev .a.both{color:var(--accent);background:var(--accent-weak)}
+@media (prefers-color-scheme:dark){.ev .a.p0{color:#7fb4ec;background:#152435}
+  .ev .a.p1{color:#eda173;background:#33200f}}
+:root[data-theme="dark"] .ev .a.p0{color:#7fb4ec;background:#152435}
+:root[data-theme="dark"] .ev .a.p1{color:#eda173;background:#33200f}
+.legend{display:flex;flex-wrap:wrap;gap:16px;margin:14px 0 18px;font-size:12px;color:var(--muted);
+  font-family:var(--mono)}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.sw{width:13px;height:13px;border-radius:3px;display:inline-block;border:1px solid var(--border)}
+footer{margin-top:34px;border-top:1px solid var(--border);padding-top:16px;color:var(--muted);
+  font-size:12.5px}
+footer a{color:var(--accent-bright)}
+.linkbtn{font:inherit;font-size:12.5px;background:none;border:0;color:var(--accent-bright);
+  cursor:pointer;padding:0}
+.linkbtn:hover{text-decoration:underline}
+@media (max-width:720px){
+  .mis .bar .tm{display:none}
+  .sessbar button i{display:none}
+}
+</style>
+
+<button class="themebtn" id="themebtn" type="button">◐ theme</button>
+<div class="wrap">
+<header class="top">
+  <div class="eyebrow">SCCN · UC San Diego · STRUM</div>
+  <h1>The STRUM experiment, to scale</h1>
+  <p id="lede"></p>
+</header>
+
+<div class="strip">
+  <h2>One session</h2>
+  <div class="sub" id="stripsub"></div>
+  <div class="sessbar" id="sessbar"></div>
+</div>
+
+<div class="legend">
+  <span><i class="sw" style="background:var(--accent-weak);border-color:var(--accent)"></i>cooperative mission</span>
+  <span><i class="sw" style="background:var(--indiv-weak);border-color:var(--indiv)"></i>individual mission</span>
+  <span><i class="sw" style="background:none;border-style:dashed"></i>observed onset range across sessions</span>
+</div>
+
+<div class="panel" id="panel"></div>
+
+<footer>
+  <p>Every number here is measured from the task events of all 33 sessions, not from the
+  protocol document — mission onsets and durations are medians over the complete instances
+  of each block. <button class="linkbtn" id="dl">download the structure as JSON</button>.</p>
+</footer>
+</div>
+
+<script>
+const DATA = {"_about":{"dataset":"STRUM — dyadic multimodal neuroergonomics recordings (SCCN, UC San Diego)","purpose":"The standard structure of the STRUM experiment: five canonical blocks of missions, with mission onsets and durations measured across every complete instance in the dataset.","generated_by":"viz/build_structure.py","sources":[".context/block-structure.tsv",".context/mission-events.tsv",".context/session-blocks.tsv"],"how_measured":"scripts/extract_task_structure.py reads every session's events.tsv, resolves block intervals with strum_bids.segments.resolve_block_intervals, identifies each block by its mission sequence (canonical_block), and takes the median onset and duration of each mission position over the COMPLETE instances of that block. A block counts as complete only if its mission sequence matches the canonical one AND every mission is bounded — when a recording starts mid-mission that mission emits only an end marker, and a sequence-only check would wrongly call the block complete.","caveats":["Onsets and durations are MEDIANS. Missions are event-driven, not fixed-length: the observed range is given per mission and is wide.","A block's timeline starts at 0 = that block's first mission onset. Blocks are separated by lulls, which are not part of any block.","Mission names encode the two members' roles in order (participant 0, participant 1) — verified, see role_evidence."],"role_evidence":{"claim":"A mission named <condition>-<X>-<Y> assigns role X to participant 0 and role Y to participant 1.","test":"Which member emits the role-specific events, over 24 recordings.","results":["indiv-pan-watch: pancam_agent_visible / pancam_reported / pancam_false_report are 100% participant 0","indiv-watch-pan: the same three families are 100% participant 1","indiv-drive-watch: stimulus_curbside 2791 p0 vs 6 p1","indiv-watch-drive: stimulus_curbside 4 p0 vs 1490 p1","coop-vehicle-aerial: stimulus_curbside 95% p0","coop-aerial-vehicle: stimulus_curbside 97% p1","coop-movetogether: stimulus_curbside 48% / 52% — symmetric","coop-secureperimeter: response_button 87% 'both' — symmetric"]}},"role_gloss":{"pan":"panoramic camera — scan the 360° feed and report agents","watch":"supporting watch — monitor, answer queries, no primary vehicle role","drive":"drive the ground vehicle along the curbside route","vehicle":"ground vehicle","aerial":"aerial vehicle"},"lull_median_s":182.6,"session_total_s":10082.1,"blocks":[{"block":"A","canonical_index":0,"duration_median":2292.2,"missions":[{"position":0,"type":"indiv-pan-watch","condition":"individual","onset":0.0,"onset_min":0.0,"onset_max":0.0,"duration":341.0,"duration_min":333.1,"duration_max":368.1,"n":42},{"position":1,"type":"indiv-watch-drive","condition":"individual","onset":341.0,"onset_min":333.2,"onset_max":368.1,"duration":324.6,"duration_min":200.1,"duration_max":438.1,"n":42},{"position":2,"type":"coop-movetogether","condition":"cooperative","onset":663.0,"onset_min":537.4,"onset_max":777.3,"duration":344.0,"duration_min":250.3,"duration_max":494.3,"n":42},{"position":3,"type":"indiv-watch-pan","condition":"individual","onset":1007.0,"onset_min":852.5,"onset_max":1218.5,"duration":321.8,"duration_min":264.5,"duration_max":372.9,"n":42},{"position":4,"type":"indiv-drive-watch","condition":"individual","onset":1297.5,"onset_min":1189.8,"onset_max":1523.4,"duration":327.2,"duration_min":206.1,"duration_max":496.1,"n":42},{"position":5,"type":"coop-aerial-vehicle","condition":"cooperative","onset":1666.6,"onset_min":1496.2,"onset_max":1927.5,"duration":436.0,"duration_min":276.0,"duration_max":675.1,"n":42}],"delivered":{"instances":72,"complete":42}},{"block":"B","canonical_index":1,"duration_median":1596.9,"missions":[{"position":0,"type":"coop-movetogether","condition":"cooperative","onset":0.0,"onset_min":0.0,"onset_max":0.0,"duration":363.3,"duration_min":257.5,"duration_max":694.3,"n":68},{"position":1,"type":"coop-vehicle-aerial","condition":"cooperative","onset":363.3,"onset_min":257.5,"onset_max":694.3,"duration":437.1,"duration_min":287.5,"duration_max":679.0,"n":68},{"position":2,"type":"indiv-drive-watch","condition":"individual","onset":801.3,"onset_min":610.1,"onset_max":1328.0,"duration":297.4,"duration_min":201.7,"duration_max":734.4,"n":68},{"position":3,"type":"coop-secureperimeter","condition":"cooperative","onset":1139.0,"onset_min":875.4,"onset_max":1669.4,"duration":268.2,"duration_min":240.9,"duration_max":302.1,"n":68}],"delivered":{"instances":74,"complete":68}},{"block":"C","canonical_index":2,"duration_median":2181.6,"missions":[{"position":0,"type":"coop-secureperimeter","condition":"cooperative","onset":0.0,"onset_min":0.0,"onset_max":0.0,"duration":266.1,"duration_min":236.2,"duration_max":300.5,"n":60},{"position":1,"type":"indiv-watch-pan","condition":"individual","onset":266.1,"onset_min":236.2,"onset_max":300.5,"duration":312.0,"duration_min":265.2,"duration_max":378.0,"n":60},{"position":2,"type":"indiv-pan-watch","condition":"individual","onset":578.1,"onset_min":517.0,"onset_max":670.5,"duration":305.8,"duration_min":265.1,"duration_max":373.0,"n":60},{"position":3,"type":"coop-vehicle-aerial","condition":"cooperative","onset":886.2,"onset_min":790.7,"onset_max":999.1,"duration":390.6,"duration_min":35.0,"duration_max":640.2,"n":60},{"position":4,"type":"coop-aerial-vehicle","condition":"cooperative","onset":1276.0,"onset_min":825.7,"onset_max":1639.3,"duration":433.3,"duration_min":0.5,"duration_max":703.1,"n":60},{"position":5,"type":"indiv-watch-drive","condition":"individual","onset":1697.8,"onset_min":826.2,"onset_max":2117.1,"duration":260.7,"duration_min":0.3,"duration_max":460.8,"n":60}],"delivered":{"instances":68,"complete":60}},{"block":"D","canonical_index":3,"duration_median":1871.7,"missions":[{"position":0,"type":"indiv-drive-watch","condition":"individual","onset":0.0,"onset_min":0.0,"onset_max":0.0,"duration":278.1,"duration_min":213.2,"duration_max":620.3,"n":58},{"position":1,"type":"indiv-pan-watch","condition":"individual","onset":278.1,"onset_min":213.2,"onset_max":620.3,"duration":305.6,"duration_min":259.6,"duration_max":380.6,"n":58},{"position":2,"type":"coop-vehicle-aerial","condition":"cooperative","onset":606.8,"onset_min":472.8,"onset_max":989.2,"duration":357.8,"duration_min":255.0,"duration_max":651.3,"n":58},{"position":3,"type":"coop-aerial-vehicle","condition":"cooperative","onset":954.8,"onset_min":821.6,"onset_max":1357.8,"duration":387.3,"duration_min":238.0,"duration_max":770.1,"n":58},{"position":4,"type":"indiv-watch-pan","condition":"individual","onset":1357.3,"onset_min":1192.8,"onset_max":2101.3,"duration":318.5,"duration_min":277.8,"duration_max":379.1,"n":58}],"delivered":{"instances":60,"complete":58}},{"block":"E","canonical_index":4,"duration_median":1409.3,"missions":[{"position":0,"type":"indiv-drive-watch","condition":"individual","onset":0.0,"onset_min":0.0,"onset_max":0.0,"duration":306.3,"duration_min":151.2,"duration_max":616.2,"n":54},{"position":1,"type":"coop-vehicle-aerial","condition":"cooperative","onset":306.3,"onset_min":151.2,"onset_max":616.2,"duration":375.3,"duration_min":244.2,"duration_max":568.3,"n":54},{"position":2,"type":"coop-aerial-vehicle","condition":"cooperative","onset":688.1,"onset_min":495.2,"onset_max":1056.8,"duration":394.5,"duration_min":295.2,"duration_max":1013.4,"n":54},{"position":3,"type":"coop-movetogether","condition":"cooperative","onset":1079.0,"onset_min":839.0,"onset_max":1854.9,"duration":331.8,"duration_min":208.0,"duration_max":658.8,"n":54}],"delivered":{"instances":56,"complete":54}}],"missions":{"coop-aerial-vehicle":{"type":"coop-aerial-vehicle","condition":"cooperative","gloss":"Roles swapped: participant 0 aerial, participant 1 ground.","symmetric":false,"n_instances":250,"signature":[{"family":"stimulus_curbside","median":47.5,"min":23,"max":106,"actor":"1","actor_frac":0.966},{"family":"agent_wanderer_added","median":10.0,"min":10,"max":10,"actor":"both","actor_frac":1.0},{"family":"checkpoint_move","median":7.0,"min":6,"max":8,"actor":"both","actor_frac":1.0},{"family":"checkpoint_reached","median":7.0,"min":6,"max":8,"actor":"both","actor_frac":1.0},{"family":"checkpoint_created","median":1.0,"min":1,"max":1,"actor":"both","actor_frac":1.0}],"common":[{"family":"response_speech_ignored","median":266.0,"actor":"0","actor_frac":0.585},{"family":"query_created","median":124.0,"actor":"0","actor_frac":0.648},{"family":"stimulus_language_written","median":83.0,"actor":"0","actor_frac":0.443},{"family":"stimulus_auditory","median":71.0,"actor":"0","actor_frac":0.5},{"family":"stimulus_language_spoken","median":68.5,"actor":"0","actor_frac":0.5},{"family":"feedback_penalty","median":50.5,"actor":"0","actor_frac":0.537},{"family":"satmap_icon_added","median":41.0,"actor":"0","actor_frac":1.0},{"family":"feedback_reward_points","median":38.0,"actor":"1","actor_frac":0.527},{"family":"auditory_feedback_reward","median":34.0,"actor":"1","actor_frac":0.554},{"family":"query_issue_focused","median":23.0,"actor":"0","actor_frac":0.529}]},"coop-movetogether":{"type":"coop-movetogether","condition":"cooperative","gloss":"Both drive. The checkpoint advances only when both arrive.","symmetric":true,"n_instances":200,"signature":[{"family":"stimulus_curbside","median":84.0,"min":37,"max":142,"actor":"1","actor_frac":0.51},{"family":"hint","median":8.0,"min":1,"max":41,"actor":"both","actor_frac":1.0},{"family":"checkpoint_move","median":7.0,"min":6,"max":8,"actor":"both","actor_frac":1.0},{"family":"checkpoint_reached","median":7.0,"min":6,"max":8,"actor":"both","actor_frac":1.0},{"family":"checkpoint_created","median":1.0,"min":1,"max":1,"actor":"both","actor_frac":1.0}],"common":[{"family":"response_speech_ignored","median":225.0,"actor":"0","actor_frac":0.535},{"family":"query_created","median":157.0,"actor":"0","actor_frac":0.503},{"family":"stimulus_language_written","median":84.0,"actor":"1","actor_frac":0.401},{"family":"satmap_icon_added","median":75.0,"actor":"0","actor_frac":0.501},{"family":"feedback_penalty","median":65.5,"actor":"0","actor_frac":0.505},{"family":"stimulus_auditory","median":65.0,"actor":"1","actor_frac":0.501},{"family":"stimulus_language_spoken","median":65.0,"actor":"0","actor_frac":0.502},{"family":"feedback_reward_points","median":36.0,"actor":"0","actor_frac":0.51},{"family":"auditory_feedback_reward","median":30.0,"actor":"0","actor_frac":0.511},{"family":"query_issue_focused","median":25.0,"actor":"0","actor_frac":0.516}]},"coop-secureperimeter":{"type":"coop-secureperimeter","condition":"cooperative","gloss":"Both defend a perimeter against approaching invaders.","symmetric":true,"n_instances":134,"signature":[{"family":"agent_invader_wait","median":58.0,"min":32,"max":96,"actor":"both","actor_frac":1.0},{"family":"agent_invader_approach","median":47.0,"min":22,"max":87,"actor":"both","actor_frac":1.0},{"family":"hint","median":27.0,"min":6,"max":48,"actor":"both","actor_frac":1.0},{"family":"agent_invader_retreat","median":17.0,"min":2,"max":36,"actor":"both","actor_frac":1.0},{"family":"feedback_reward_on_accuracy","median":15.0,"min":2,"max":32,"actor":"both","actor_frac":1.0},{"family":"agent_invader_added","median":7.0,"min":7,"max":7,"actor":"both","actor_frac":1.0}],"common":[{"family":"response_speech_ignored","median":136.0,"actor":"0","actor_frac":0.565},{"family":"query_created","median":107.0,"actor":"1","actor_frac":0.503},{"family":"response_button","median":87.0,"actor":"both","actor_frac":0.925},{"family":"feedback_penalty","median":80.0,"actor":"0","actor_frac":0.505},{"family":"stimulus_language_written","median":70.0,"actor":"0","actor_frac":0.346},{"family":"feedback_reward_points","median":60.0,"actor":"1","actor_frac":0.502},{"family":"satmap_icon_added","median":55.0,"actor":"1","actor_frac":0.505},{"family":"stimulus_auditory","median":47.0,"actor":"0","actor_frac":0.5},{"family":"stimulus_language_spoken","median":46.0,"actor":"0","actor_frac":0.5},{"family":"controller_button","median":19.0,"actor":"0","actor_frac":0.523}]},"coop-vehicle-aerial":{"type":"coop-vehicle-aerial","condition":"cooperative","gloss":"Participant 0 takes the ground vehicle, participant 1 the aerial.","symmetric":false,"n_instances":248,"signature":[{"family":"stimulus_curbside","median":42.0,"min":13,"max":86,"actor":"0","actor_frac":0.968},{"family":"agent_wanderer_added","median":10.0,"min":10,"max":10,"actor":"both","actor_frac":1.0},{"family":"checkpoint_move","median":7.0,"min":6,"max":8,"actor":"both","actor_frac":1.0},{"family":"checkpoint_reached","median":7.0,"min":6,"max":8,"actor":"both","actor_frac":1.0},{"family":"checkpoint_created","median":1.0,"min":1,"max":1,"actor":"both","actor_frac":1.0}],"common":[{"family":"response_speech_ignored","median":263.0,"actor":"0","actor_frac":0.517},{"family":"query_created","median":120.0,"actor":"1","actor_frac":0.65},{"family":"stimulus_language_written","median":78.0,"actor":"1","actor_frac":0.443},{"family":"stimulus_auditory","median":67.0,"actor":"1","actor_frac":0.5},{"family":"stimulus_language_spoken","median":65.0,"actor":"0","actor_frac":0.501},{"family":"feedback_penalty","median":50.0,"actor":"1","actor_frac":0.524},{"family":"satmap_icon_added","median":38.5,"actor":"1","actor_frac":1.0},{"family":"feedback_reward_points","median":38.0,"actor":"0","actor_frac":0.504},{"family":"auditory_feedback_reward","median":32.0,"actor":"1","actor_frac":0.505},{"family":"query_issue_focused","median":24.0,"actor":"1","actor_frac":0.537}]},"indiv-drive-watch":{"type":"indiv-drive-watch","condition":"individual","gloss":"Participant 0 drives the checkpoint route; participant 1 watches.","symmetric":false,"n_instances":258,"signature":[{"family":"stimulus_curbside","median":39.0,"min":8,"max":89,"actor":"0","actor_frac":0.999},{"family":"checkpoint_move","median":7.0,"min":6,"max":8,"actor":"both","actor_frac":1.0},{"family":"checkpoint_reached","median":7.0,"min":6,"max":8,"actor":"both","actor_frac":1.0},{"family":"checkpoint_created","median":1.0,"min":1,"max":1,"actor":"both","actor_frac":1.0}],"common":[{"family":"response_speech_ignored","median":145.0,"actor":"0","actor_frac":0.573},{"family":"query_created","median":133.0,"actor":"0","actor_frac":0.505},{"family":"satmap_icon_added","median":66.0,"actor":"0","actor_frac":0.502},{"family":"stimulus_language_written","median":59.0,"actor":"0","actor_frac":0.492},{"family":"stimulus_auditory","median":56.0,"actor":"0","actor_frac":0.5},{"family":"stimulus_language_spoken","median":55.0,"actor":"0","actor_frac":0.503},{"family":"feedback_reward_points","median":40.0,"actor":"1","actor_frac":0.515},{"family":"auditory_feedback_reward","median":38.0,"actor":"1","actor_frac":0.612},{"family":"feedback_penalty","median":30.0,"actor":"0","actor_frac":0.628},{"family":"query_issue_focused","median":23.0,"actor":"1","actor_frac":0.562}]},"indiv-pan-watch":{"type":"indiv-pan-watch","condition":"individual","gloss":"Participant 0 works the panoramic camera; participant 1 watches.","symmetric":false,"n_instances":168,"signature":[{"family":"pancam_agent_visible","median":46.5,"min":17,"max":212,"actor":"0","actor_frac":1.0},{"family":"pancam_reported","median":21.0,"min":7,"max":42,"actor":"0","actor_frac":1.0},{"family":"agent_wanderer_added","median":7.0,"min":7,"max":7,"actor":"both","actor_frac":1.0},{"family":"pancam_false_report","median":4.0,"min":1,"max":9,"actor":"0","actor_frac":1.0}],"common":[{"family":"response_speech_ignored","median":146.0,"actor":"0","actor_frac":0.571},{"family":"query_created","median":130.5,"actor":"1","actor_frac":0.502},{"family":"satmap_icon_added","median":64.5,"actor":"0","actor_frac":0.504},{"family":"stimulus_language_written","median":59.0,"actor":"0","actor_frac":0.487},{"family":"auditory_feedback_reward","median":57.5,"actor":"0","actor_frac":0.612},{"family":"feedback_reward_points","median":57.0,"actor":"0","actor_frac":0.672},{"family":"stimulus_auditory","median":56.0,"actor":"1","actor_frac":0.501},{"family":"stimulus_language_spoken","median":55.0,"actor":"1","actor_frac":0.5},{"family":"feedback_penalty","median":32.0,"actor":"0","actor_frac":0.641},{"family":"query_issue_focused","median":23.0,"actor":"1","actor_frac":0.554}]},"indiv-watch-drive":{"type":"indiv-watch-drive","condition":"individual","gloss":"Roles swapped: participant 1 drives.","symmetric":false,"n_instances":136,"signature":[{"family":"stimulus_curbside","median":37.0,"min":13,"max":78,"actor":"1","actor_frac":0.997},{"family":"checkpoint_move","median":7.0,"min":6,"max":8,"actor":"both","actor_frac":1.0},{"family":"checkpoint_reached","median":7.0,"min":6,"max":8,"actor":"both","actor_frac":1.0},{"family":"checkpoint_created","median":1.0,"min":1,"max":1,"actor":"both","actor_frac":1.0}],"common":[{"family":"response_speech_ignored","median":145.0,"actor":"0","actor_frac":0.558},{"family":"query_created","median":125.0,"actor":"1","actor_frac":0.508},{"family":"satmap_icon_added","median":61.0,"actor":"1","actor_frac":0.502},{"family":"stimulus_language_written","median":57.0,"actor":"1","actor_frac":0.491},{"family":"stimulus_auditory","median":53.0,"actor":"1","actor_frac":0.501},{"family":"stimulus_language_spoken","median":53.0,"actor":"0","actor_frac":0.501},{"family":"auditory_feedback_reward","median":40.0,"actor":"0","actor_frac":0.605},{"family":"feedback_reward_points","median":35.0,"actor":"1","actor_frac":0.506},{"family":"feedback_penalty","median":30.0,"actor":"1","actor_frac":0.578},{"family":"query_issue_focused","median":22.0,"actor":"0","actor_frac":0.574}]},"indiv-watch-pan":{"type":"indiv-watch-pan","condition":"individual","gloss":"Roles swapped: participant 1 works the panoramic camera.","symmetric":false,"n_instances":200,"signature":[{"family":"pancam_agent_visible","median":43.0,"min":4,"max":141,"actor":"1","actor_frac":1.0},{"family":"pancam_reported","median":17.5,"min":1,"max":43,"actor":"1","actor_frac":1.0},{"family":"agent_wanderer_added","median":7.0,"min":7,"max":7,"actor":"both","actor_frac":1.0},{"family":"pancam_false_report","median":4.0,"min":1,"max":13,"actor":"1","actor_frac":1.0},{"family":"pancam_doubly_reported","median":3.0,"min":1,"max":19,"actor":"1","actor_frac":1.0}],"common":[{"family":"response_speech_ignored","median":146.0,"actor":"0","actor_frac":0.575},{"family":"query_created","median":129.0,"actor":"0","actor_frac":0.506},{"family":"satmap_icon_added","median":64.0,"actor":"0","actor_frac":0.505},{"family":"auditory_feedback_reward","median":63.5,"actor":"1","actor_frac":0.649},{"family":"stimulus_language_written","median":58.5,"actor":"1","actor_frac":0.488},{"family":"stimulus_auditory","median":56.0,"actor":"0","actor_frac":0.5},{"family":"feedback_reward_points","median":54.5,"actor":"1","actor_frac":0.69},{"family":"stimulus_language_spoken","median":54.0,"actor":"1","actor_frac":0.502},{"family":"feedback_penalty","median":33.0,"actor":"1","actor_frac":0.627},{"family":"auditory_feedback_penalty","median":28.0,"actor":"1","actor_frac":0.72}]}}};
+const B = DATA.blocks, M = DATA.missions;
+let cur = 0, sel = null;
+
+const mmss = (s)=>{const m=Math.floor(s/60);return `${m}:${String(Math.round(s-m*60)).padStart(2,"0")}`};
+const mins = (s)=>`${(s/60).toFixed(0)} min`;
+const SHORT = {
+  "indiv-pan-watch":"pan / watch","indiv-watch-pan":"watch / pan",
+  "indiv-drive-watch":"drive / watch","indiv-watch-drive":"watch / drive",
+  "coop-vehicle-aerial":"vehicle / aerial","coop-aerial-vehicle":"aerial / vehicle",
+  "coop-movetogether":"move together","coop-secureperimeter":"secure perimeter"};
+// A bare majority is not an attribution: at 52/48 the family is emitted by both members
+// and labelling it "p1" would contradict the mission being symmetric. Only call it a
+// member's event when that member emits at least 60% of them.
+const SPLIT = 0.6;
+const actorCls = (a,f)=> (a==="0"||a==="1") && f<SPLIT ? "" : a==="0"?"p0":a==="1"?"p1":a==="both"?"both":"";
+const actorTxt = (a,f)=> (a==="0"||a==="1") && f<SPLIT ? "split" : a==="0"?"p0":a==="1"?"p1":a==="both"?"both":"—";
+
+document.getElementById("lede").textContent =
+  `Every session delivers the same five blocks of missions in the same order, separated by `
+  + `rest lulls of about ${Math.round(DATA.lull_median_s/60)} minutes — about `
+  + `${(DATA.session_total_s/3600).toFixed(1)} hours of task in total. Pick a block, then a `
+  + `mission, to see what the task actually emits inside it.`;
+
+// ---- session strip: the five blocks and four lulls, to scale ----
+function drawStrip(){
+  const total = DATA.session_total_s;
+  const bar = document.getElementById("sessbar");
+  let html = "";
+  B.forEach((b,i)=>{
+    const w = (b.duration_median/total*100).toFixed(3);
+    html += `<button type="button" data-i="${i}" aria-pressed="${i===cur}"
+      style="flex:0 0 ${w}%" title="block ${b.block} · ${mins(b.duration_median)}">
+      <b>${b.block}</b><i>${mins(b.duration_median)}</i></button>`;
+    if(i < B.length-1){
+      const lw = (DATA.lull_median_s/total*100).toFixed(3);
+      html += `<div class="lullseg" style="--lw:${lw}%" title="inter-block lull · ${mins(DATA.lull_median_s)}">lull</div>`;
+    }
+  });
+  bar.innerHTML = html;
+  bar.querySelectorAll("button").forEach(el=>{
+    el.onclick = ()=>{ cur = +el.dataset.i; sel = null; render(); };
+  });
+  document.getElementById("stripsub").textContent =
+    `5 blocks · 4 lulls · widths are to scale (median ${(DATA.session_total_s/3600).toFixed(1)} h)`;
+}
+
+// ---- one block: missions anchored at their measured onsets ----
+function drawPanel(){
+  const b = B[cur];
+  // The axis spans the block; the widest observed mission end sets the right edge so a
+  // long-running instance's range marker cannot be clipped.
+  // m.duration, not m.duration_median: only the BLOCK carries duration_median. Reading
+  // the wrong key made span NaN, which silently collapsed every bar to left:0.
+  const span = Math.max(b.duration_median,
+    ...b.missions.map(m=>m.onset_max + m.duration));
+  const pc = (s)=> (s/span*100);
+  const ticks = [];
+  for(let t=0; t<=span; t+=300) ticks.push(t);
+  const axis = ticks.map(t=>`<span style="left:${pc(t)}%">${mmss(t)}</span>`).join("");
+
+  const rows = b.missions.map((m,i)=>{
+    const left = pc(m.onset), w = Math.max(pc(m.duration), 4.5);
+    const rl = pc(m.onset_min), rw = Math.max(pc(m.onset_max-m.onset_min), 0.25);
+    const on = sel===i ? "true" : "false";
+    return `<div class="mis">
+      <div class="rng" style="left:${rl}%;width:${rw}%"></div>
+      <button class="bar ${m.condition==="cooperative"?"coop":"indiv"}" data-i="${i}"
+        aria-pressed="${on}" style="left:${left}%;width:${w}%"
+        title="${m.type} · median ${mmss(m.duration)} (${mmss(m.duration_min)}–${mmss(m.duration_max)}), n=${m.n}">
+        <span class="nm">${SHORT[m.type]||m.type}</span>
+        <span class="tm">${mmss(m.onset)} · ${mmss(m.duration)}</span>
+      </button></div>`;
+  }).join("");
+
+  const d = b.delivered || {instances:0,complete:0};
+  return `<div class="phead">
+      <h2>Block ${b.block}</h2>
+      <div class="meta">${b.missions.length} missions · median ${mins(b.duration_median)} ·
+      delivered ${d.instances} times, ${d.complete} complete</div>
+    </div>
+    <div class="axis">${axis}</div>
+    <div class="tl">${rows}</div>
+    <div class="pnote">Bars sit at each mission's <b>median onset</b> and are as wide as its
+    <b>median duration</b>. The thin bracket behind a bar is the full range of onsets observed
+    across sessions — missions are event-driven, not fixed-length, so a block's later missions
+    drift by minutes. Click a mission for what the task emits inside it.</div>`;
+}
+
+// ---- one mission: measured event composition ----
+function drawDetail(){
+  if(sel===null) return "";
+  const m0 = B[cur].missions[sel], m = M[m0.type];
+  if(!m) return "";
+  const roles = (()=>{
+    if(m.symmetric) return `<div class="role"><b>symmetric</b><span>Both members have the
+      same role in this mission.</span></div>`;
+    const parts = m0.type.split("-");
+    const [r0, r1] = [parts[1], parts[2]];
+    const g = DATA.role_gloss;
+    return `<div class="role"><b>participant 0 · ${r0}</b><span>${g[r0]||""}</span></div>
+      <div class="role"><b>participant 1 · ${r1}</b><span>${g[r1]||""}</span></div>`;
+  })();
+  const evrow = (e, showRange)=>`<div class="ev">
+    <span class="f" title="${e.family}">${e.family}</span>
+    <span class="c">${e.median % 1 ? e.median.toFixed(1) : e.median}${
+      showRange && e.min!==undefined ? `<span style="color:var(--muted)"> (${e.min}–${e.max})</span>`:""}</span>
+    <span class="a ${actorCls(e.actor,e.actor_frac)}" title="majority ${(e.actor_frac*100).toFixed(0)}%">${actorTxt(e.actor,e.actor_frac)}</span></div>`;
+  const sig = m.signature.length
+    ? m.signature.map(e=>evrow(e,true)).join("")
+    : `<div class="ev"><span class="f" style="color:var(--muted)">none — this mission is
+       defined by its roles, not by a unique event family</span><span></span><span></span></div>`;
+  return `<div class="detail">
+    <h3>${SHORT[m0.type]||m0.type} <span style="font-family:var(--mono);font-size:12px;
+      color:var(--muted);font-weight:400">${m0.type}</span></h3>
+    <div class="dgloss">${m.gloss} Median ${mmss(m0.duration)}
+      (${mmss(m0.duration_min)}–${mmss(m0.duration_max)}) over ${m0.n} complete instances;
+      ${m.n_instances} instances of this mission type in the dataset.</div>
+    <div class="roles">${roles}</div>
+    <div class="evgrid">
+      <div class="evcol"><h4>identifies this mission</h4>${sig}</div>
+      <div class="evcol"><h4>also present (task-wide)</h4>
+        ${m.common.map(e=>evrow(e,false)).join("")}</div>
+    </div>
+    <div class="pnote">Counts are the median number of events of that family in one instance
+    of this mission; the tag is the participant the events are attributed to. "Identifies this
+    mission" = families present in over 80% of these missions and under 10% of some other
+    mission type — the rest of the task emits them rarely or never.</div>
+  </div>`;
+}
+
+function render(){
+  document.getElementById("panel").innerHTML = drawPanel() + drawDetail();
+  document.querySelectorAll("#panel .bar").forEach(el=>{
+    el.onclick = ()=>{ const i=+el.dataset.i; sel = (sel===i? null : i); render(); };
+  });
+  document.querySelectorAll("#sessbar button").forEach(el=>{
+    el.setAttribute("aria-pressed", (+el.dataset.i===cur)+"");
+  });
+}
+
+// ---- theme + download ----
+(function(){
+  const btn = document.getElementById("themebtn");
+  const sys = matchMedia("(prefers-color-scheme:dark)").matches ? "dark":"light";
+  let t = localStorage.getItem("strum-theme") || sys;
+  const apply = ()=>document.documentElement.setAttribute("data-theme", t);
+  apply();
+  btn.onclick = ()=>{ t = t==="dark"?"light":"dark"; localStorage.setItem("strum-theme",t); apply(); };
+})();
+document.getElementById("dl").onclick = ()=>{
+  const blob = new Blob([JSON.stringify(DATA,null,2)], {type:"application/json"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob); a.download = "strum-structure.json"; a.click();
+  URL.revokeObjectURL(a.href);
+};
+addEventListener("keydown", e=>{
+  if(e.key==="ArrowRight"){ cur=(cur+1)%B.length; sel=null; render(); }
+  if(e.key==="ArrowLeft"){ cur=(cur-1+B.length)%B.length; sel=null; render(); }
+});
+
+drawStrip(); render();
+</script>
