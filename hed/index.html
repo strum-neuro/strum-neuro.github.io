@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>STRUM Event -> HED Mapping</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Every STRUM event type mapped to a validated HED-3G tag: meaning, tag, and a filled example.">
+</head>
+<body>
+<style>
+:root{
+  --bg:#f1f3f2; --surface:#ffffff; --panel:#eef2f1; --ink:#16201e; --ink2:#3f4a48;
+  --muted:#68736f; --hairline:#dde4e1; --hairline2:#e7ecea;
+  --accent:#0f736c; --accent-strong:#0b5c56;
+  --ok:#2f7d55; --ok-bg:rgba(47,125,85,.10); --ok-bd:rgba(47,125,85,.45);
+  --flag:#a8620a; --flag-bg:rgba(168,98,10,.09); --flag-bd:rgba(168,98,10,.5);
+  --ph:#0f736c; --pn:#9aa6a3;
+  --shadow:0 1px 2px rgba(16,32,30,.04),0 4px 16px rgba(16,32,30,.05);
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono","JetBrains Mono","Cascadia Code","Roboto Mono",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root{
+    --bg:#101514; --surface:#171d1c; --panel:#1c2423; --ink:#e6ece9; --ink2:#bcc6c3;
+    --muted:#889390; --hairline:#28302e; --hairline2:#222a29;
+    --accent:#4fb3a8; --accent-strong:#6fd0c4;
+    --ok:#5cbf88; --ok-bg:rgba(92,191,136,.13); --ok-bd:rgba(92,191,136,.4);
+    --flag:#e0a24a; --flag-bg:rgba(224,162,74,.12); --flag-bd:rgba(224,162,74,.45);
+    --ph:#6fd0c4; --pn:#6f7c79;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.28);
+  }
+}
+:root[data-theme="light"]{
+  --bg:#f1f3f2; --surface:#ffffff; --panel:#eef2f1; --ink:#16201e; --ink2:#3f4a48;
+  --muted:#68736f; --hairline:#dde4e1; --hairline2:#e7ecea;
+  --accent:#0f736c; --accent-strong:#0b5c56;
+  --ok:#2f7d55; --ok-bg:rgba(47,125,85,.10); --ok-bd:rgba(47,125,85,.45);
+  --flag:#a8620a; --flag-bg:rgba(168,98,10,.09); --flag-bd:rgba(168,98,10,.5);
+  --ph:#0f736c; --pn:#9aa6a3;
+  --shadow:0 1px 2px rgba(16,32,30,.04),0 4px 16px rgba(16,32,30,.05);
+}
+:root[data-theme="dark"]{
+  --bg:#101514; --surface:#171d1c; --panel:#1c2423; --ink:#e6ece9; --ink2:#bcc6c3;
+  --muted:#889390; --hairline:#28302e; --hairline2:#222a29;
+  --accent:#4fb3a8; --accent-strong:#6fd0c4;
+  --ok:#5cbf88; --ok-bg:rgba(92,191,136,.13); --ok-bd:rgba(92,191,136,.4);
+  --flag:#e0a24a; --flag-bg:rgba(224,162,74,.12); --flag-bd:rgba(224,162,74,.45);
+  --ph:#6fd0c4; --pn:#6f7c79;
+  --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.28);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);
+  font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased;}
+.wrap{max-width:1000px;margin:0 auto;padding:0 22px}
+
+/* masthead */
+.mast{padding:52px 0 26px}
+.kicker{font-family:var(--mono);font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--accent);font-weight:600;margin:0 0 14px}
+.mast h1{font-size:clamp(28px,4.4vw,40px);line-height:1.05;letter-spacing:-.02em;font-weight:800;
+  margin:0 0 14px;text-wrap:balance;max-width:20ch}
+.mast h1 .arw{color:var(--accent);font-family:var(--mono);font-weight:600}
+.lede{font-size:16.5px;line-height:1.5;color:var(--ink2);max-width:62ch;margin:0 0 26px}
+.statband{display:flex;flex-wrap:wrap;gap:0;border:1px solid var(--hairline);border-radius:10px;
+  background:var(--surface);overflow:hidden;box-shadow:var(--shadow)}
+.stat{padding:14px 20px;border-right:1px solid var(--hairline);flex:1 1 auto;min-width:120px}
+.stat:last-child{border-right:0}
+.stat .n{font-family:var(--mono);font-size:23px;font-weight:700;letter-spacing:-.01em;
+  font-variant-numeric:tabular-nums;line-height:1;display:block}
+.stat .l{font-size:12px;color:var(--muted);margin-top:6px;letter-spacing:.02em}
+.stat.ok .n{color:var(--ok)} .stat.flag .n{color:var(--flag)}
+.stat.ver .n{font-size:15px;font-weight:600;color:var(--ink);padding-top:5px}
+
+/* how to read */
+.howto{margin:22px 0 6px;border-top:1px solid var(--hairline);padding-top:22px}
+.howto h2{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);
+  font-weight:600;margin:0 0 14px}
+.legend{display:grid;grid-template-columns:repeat(auto-fit,minmax(232px,1fr));gap:14px 26px}
+.leg{display:flex;gap:11px;align-items:flex-start}
+.leg .mk{flex:none;margin-top:1px}
+.leg p{margin:0;font-size:13.5px;color:var(--ink2);line-height:1.45}
+.leg p b{color:var(--ink);font-weight:600}
+.samp{font-family:var(--mono);font-size:12.5px;background:var(--panel);border:1px solid var(--hairline);
+  padding:1px 6px;border-radius:5px;white-space:nowrap}
+.samp .ph{color:var(--ph);font-weight:600}
+.dot{width:10px;height:10px;border-radius:3px;display:inline-block}
+.dot.ok{background:var(--ok)} .dot.flag{background:var(--flag)}
+.prov{margin:16px 0 0;padding:11px 15px;border:1px dashed var(--flag-bd);
+  background:var(--flag-bg);border-radius:9px;font-size:13px;color:var(--ink2);line-height:1.5}
+.prov b{color:var(--flag)}
+
+/* sticky index */
+.nav{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--bg) 88%,transparent);
+  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--hairline);margin-top:30px}
+.nav-in{max-width:1000px;margin:0 auto;padding:9px 18px;display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.nav a{font-size:12px;color:var(--muted);text-decoration:none;padding:4px 9px;border-radius:999px;
+  border:1px solid transparent;white-space:nowrap;transition:color .15s,background .15s,border-color .15s}
+.nav a:hover{color:var(--ink);background:var(--surface);border-color:var(--hairline)}
+.nav a.active{color:var(--accent);background:var(--surface);border-color:var(--accent);font-weight:600}
+.nav a .c{font-family:var(--mono);opacity:.6;font-size:11px;margin-left:4px}
+
+/* sections */
+.sec{padding:34px 0 8px;scroll-margin-top:58px}
+.sec-h{display:flex;align-items:baseline;gap:12px;margin:0 0 18px;
+  border-bottom:1px solid var(--hairline);padding-bottom:10px}
+.sec-h .idx{font-family:var(--mono);font-size:12px;color:var(--accent);font-weight:600;letter-spacing:.06em}
+.sec-h h2{font-size:19px;font-weight:700;letter-spacing:-.01em;margin:0;flex:1}
+.sec-h .ct{font-family:var(--mono);font-size:12px;color:var(--muted);font-variant-numeric:tabular-nums}
+
+/* event card */
+.grid{display:flex;flex-direction:column;gap:14px}
+.evt{background:var(--surface);border:1px solid var(--hairline);border-radius:11px;
+  padding:16px 18px 15px;box-shadow:var(--shadow)}
+.evt-h{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.evt-id{font-family:var(--mono);font-size:15px;font-weight:600;color:var(--ink);letter-spacing:-.01em}
+.evt-id .br{color:var(--muted)}
+.chips{display:flex;gap:6px;align-items:center;margin-left:auto;flex-wrap:wrap}
+.chip{font-size:11px;font-family:var(--mono);color:var(--muted);border:1px solid var(--hairline);
+  padding:2px 7px;border-radius:6px;white-space:nowrap;background:var(--bg)}
+.chip .k{opacity:.6}
+.pill{font-size:10.5px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;
+  padding:3px 8px;border-radius:6px}
+.pill.ok{color:var(--ok);background:var(--ok-bg);border:1px solid var(--ok-bd)}
+.pill.flag{color:var(--flag);background:var(--flag-bg);border:1px solid var(--flag-bd)}
+.meaning{margin:0 0 12px;font-size:14px;color:var(--ink2);line-height:1.5;max-width:74ch}
+.hed{font-family:var(--mono);font-size:13px;line-height:1.65;background:var(--panel);
+  border:1px solid var(--hairline);border-left:3px solid var(--ok-bd);border-radius:8px;
+  padding:11px 14px;white-space:pre-wrap;word-break:break-word;overflow-wrap:anywhere;color:var(--ink)}
+.evt.isflag .hed{border-left-color:var(--flag-bd)}
+.hed .ph{color:var(--ph);font-weight:600}
+.hed .pn{color:var(--pn)}
+.flagnote{display:flex;gap:9px;margin-top:11px;padding:10px 13px;background:var(--flag-bg);
+  border:1px solid var(--flag-bd);border-radius:8px;font-size:12.5px;color:var(--ink2);line-height:1.45}
+.flagnote b{color:var(--flag)}
+.eg{margin:11px 0 0;font-size:12.5px;color:var(--muted);line-height:1.45}
+.eg .lab{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--accent);margin-right:7px}
+.more{margin-top:11px;border-top:1px dashed var(--hairline);padding-top:0}
+.more summary{cursor:pointer;font-size:11.5px;color:var(--muted);letter-spacing:.04em;
+  padding-top:10px;list-style:none;user-select:none;display:inline-flex;align-items:center;gap:6px}
+.more summary::-webkit-details-marker{display:none}
+.more summary .tw{font-family:var(--mono);transition:transform .15s}
+.more[open] summary .tw{transform:rotate(90deg)}
+.more dl{margin:12px 0 2px;display:grid;grid-template-columns:auto 1fr;gap:9px 16px}
+.more dt{font-family:var(--mono);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;
+  color:var(--accent);padding-top:2px}
+.more dd{margin:0;font-size:12.5px;color:var(--ink2);line-height:1.5}
+.more dd.mono{font-family:var(--mono);font-size:12px;color:var(--ink)}
+.more dd.mono .ph{color:var(--ph);font-weight:600}
+
+footer{margin:44px 0 40px;padding-top:20px;border-top:1px solid var(--hairline);
+  font-size:12px;color:var(--muted);line-height:1.6}
+footer b{color:var(--ink2);font-weight:600}
+@media (max-width:560px){
+  .mast{padding:36px 0 20px}
+  .stat{min-width:50%;flex:1 1 50%}
+  .chips{margin-left:0;width:100%}
+  .more dl{grid-template-columns:1fr;gap:3px 0}
+  .more dt{margin-top:8px}
+}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+</style>
+
+<div class="wrap">
+  <header class="mast">
+    <p class="kicker">STRUM &#183; BIDS &#183; HED-3G annotation</p>
+    <h1>Event <span class="arw">&rarr;</span> HED mapping</h1>
+    <p class="lede">Every event type in the STRUM dyadic neuroergonomics task, mapped to a
+      HED-3G tag: what it means, the tag itself, and a real filled example. The teal parts of
+      each tag are <b>placeholders</b> filled per row from the events table. Every tag was
+      validated with the official <b>hedtools</b> validator.</p>
+    <div class="statband">
+      <div class="stat"><span class="n">55</span><span class="l">event types &#183; 40 slots, branches split</span></div>
+      <div class="stat ok"><span class="n">55</span><span class="l">validated &#183; 0 errors</span></div>
+      <div class="stat flag"><span class="n">0</span><span class="l">flagged for your review</span></div>
+      <div class="stat ver"><span class="n">8.4.0</span><span class="l">HED schema &#183; also clean on 8.3.0</span></div>
+    </div>
+    <p class="prov"><b>Provisional (duration redesign).</b> Persistent / paired events
+      (agents, satmap icons, pan-the-cam, query, checkpoint, satmap task) are collapsed into
+      single <b>durationed</b> events &mdash; the partner "remove/disable/invisible" event is
+      dropped and its timing becomes the duration. Pending the game software; these rows are
+      marked <span class="samp">interval</span>.</p>
+    <div class="howto">
+      <h2>How to read this</h2>
+      <div class="legend">
+        <div class="leg"><span class="mk"><span class="samp">(Sensory-event, Label/<span class="ph">{icon}</span>)</span></span>
+          <p><b>Teal = placeholder.</b> Filled per row from the events table (who, duration, value, coords).</p></div>
+        <div class="leg"><span class="mk"><span class="dot ok"></span></span>
+          <p><b>OK</b> &mdash; validated at 0 errors on HED 8.4.0 and 8.3.0.</p></div>
+        <div class="leg"><span class="mk"><span class="dot flag"></span></span>
+          <p><b>Flag</b> &mdash; a modeling call still open for you, not a validation error.</p></div>
+        <div class="leg"><span class="mk"><span class="samp">event<span class="ph">/value</span></span></span>
+          <p><b>Branch rows.</b> When the value changes the tag (not just a label), it gets its own row.</p></div>
+        <div class="leg"><span class="mk"><span class="samp">0 = &#916; &#183; 1 = E</span></span>
+          <p><b>Players.</b> 0 = Delta, 1 = Echo, both = the dyad. Only <span class="samp">ID/</span> use.</p></div>
+        <div class="leg"><span class="mk"><span class="samp">route (a)</span></span>
+          <p><b>Not the sidecar yet.</b> Templates are ready for a generated per-row HED column; route &amp; version are yours to confirm.</p></div>
+      </div>
+    </div>
+  </header>
+</div>
+<nav class="nav"><div class="nav-in" id="navin"></div></nav>
+<div class="wrap"><div id="sections"></div>
+  <footer>
+    <b>Design artifact / data dictionary</b> &mdash; source of truth is
+    <b>.context/hed/strum_event_hed_master.tsv</b> (validated with hedtools, HED 8.4.0).
+    Persistent / paired events are collapsed into single <b>durationed</b> events (PROVISIONAL,
+    pending the LSE game software). Flags (0): the two agent-presence perceptibility
+    calls and the checkpoint-duration revisit. Open BIDS question: route (a vs b).
+  </footer>
+</div>
+
+<script>
+const D = {"rows": [{"id": "experiment", "meaning": "Whole experiment run (Sequence/Experiment Begins..Ends).", "players": "both", "interval": true, "vrule": "no value (value empty; may carry boundary flag)", "nl": "An experiment lasting {duration} seconds involves {who}.", "hed": "(Duration/{duration} s, (Experiment-structure, {who}))", "flag": false, "reason": "", "example": "An experiment lasting 10541.4 seconds involves participants Delta and Echo.", "sec": "struct"}, {"id": "block", "meaning": "One experimental block, 0-4 (Sequence/Block Begins..Ends/N).", "players": "both", "interval": true, "vrule": "whole -> {block_number}", "nl": "An experimental block lasting {duration} seconds, labeled {block_number}, involves {who}.", "hed": "(Duration/{duration} s, (Experiment-structure, (Label/{block_number}, {who})))", "flag": false, "reason": "", "example": "An experimental block lasting 2537.0 seconds, labeled 0, involves participants Delta and Echo.", "sec": "struct"}, {"id": "mission", "meaning": "A foreground mission/activity (Sequence/Mission Begins..Ends/<type>); type kept WHOLE though it contains \"/\".", "players": "both", "interval": true, "vrule": "whole -> {mission_type} (NOT split); HED: sanitize {mission_type} -> Label (kept whole)", "nl": "A mission lasting {duration} seconds, of type \"{mission_type}\", involves {who}.", "hed": "(Duration/{duration} s, (Experiment-structure, Task, Label/{mission_type}, {who}))", "flag": false, "reason": "", "example": "A mission lasting 347.9 seconds, of type \"indiv-pan/watch\", involves participants Delta and Echo.", "sec": "struct"}, {"id": "lull", "meaning": "Inter-block rest period (Sequence/Lull Begins/<type>), type=lull-deep.", "players": "both", "interval": true, "vrule": "whole -> {lull_type}; HED: sanitize {lull_type} -> Label", "nl": "A between-block rest period lasting {duration} seconds, of type \"{lull_type}\", involves {who}.", "hed": "(Duration/{duration} s, (Experiment-structure, Rest, Label/{lull_type}, {who}))", "flag": false, "reason": "", "example": "A between-block rest period lasting 231.2 seconds, of type \"lull-deep\", involves participants Delta and Echo.", "sec": "struct"}, {"id": "comms_lull", "meaning": "A pause in the comm-chatter (textcomm) task (Comms/Lull Begins..Ends).", "players": "0 / 1", "interval": true, "vrule": "no value", "nl": "A pause in the comm-chatter communication task, lasting {duration} seconds, involves {who}.", "hed": "(Duration/{duration} s, (Pause, (Task, Label/comm-chatter), {who}))", "flag": false, "reason": "", "example": "A pause in the comm-chatter communication task, lasting 23.7 seconds, involves participant Echo.", "sec": "struct"}, {"id": "comms_action_seq", "meaning": "An active period in the comm-chatter task (Comms/Action Sequence Begins..Ends).", "players": "0 / 1", "interval": true, "vrule": "no value", "nl": "An active-engagement period in the \"comm-chatter\" side task, lasting {duration} seconds, involves {who}.", "hed": "(Duration/{duration} s, (Task-activity, (Task, Label/comm-chatter), {who}))", "flag": false, "reason": "", "example": "An active-engagement period in the \"comm-chatter\" side task, lasting 424.5 seconds, involves participant Echo.", "sec": "struct"}, {"id": "indicator_light", "meaning": "Red warning indicator light is ON for an interval (Indicators/On..Off).", "players": "0 / 1", "interval": true, "vrule": "no value", "nl": "A red visual warning is shown on {who}'s screen, lasting {duration} seconds.", "hed": "(Duration/{duration} s, (Sensory-event, Warning, Visual-presentation, (Red, Icon), (Lower-right-of, Computer-screen), {who}))", "flag": false, "reason": "", "example": "A red visual warning is shown on participant Delta's screen, lasting 51.5 seconds.", "sec": "warn"}, {"id": "indicator_demands", "meaning": "Response window opens on the warning-light task (Indicators/DemandsResponse); fires just before the light is drawn, so the red visual presentation itself is the indicator_light interval.", "players": "0 / 1", "interval": false, "vrule": "no value", "nl": "The warning-light task opens a response window for {who}.", "hed": "(Experiment-control, Warning, Cue, {who})", "flag": false, "reason": "", "example": "The warning-light task opens a response window for participant Delta.", "sec": "warn"}, {"id": "indicator_timeout", "meaning": "The warning-light on-interval / response window closes (Indicators/Time Is Up); emitted unconditionally at every close, so it is NOT a miss (the miss is a separate Missed Action -> action/missed).", "players": "0 / 1", "interval": false, "vrule": "no value", "nl": "The warning-light response window for {who} closes.", "hed": "(Experiment-control, Warning, Time-out, {who})", "flag": false, "reason": "", "example": "The warning-light response window for participant Delta closes.", "sec": "warn"}, {"id": "attention_switch", "meaning": "The system reassigns the attended side-task set AND presents a visual instruction to the participant ('starting now, your side tasks are the ...', 1259-1281) and fades the region indicators. value = the sanitized active-region-set token; region names contain hyphens so it is a single label, NOT separable into per-task groups.", "players": "0 / 1", "interval": false, "vrule": "whole -> {active_tasks} (single sanitized token; NOT splittable - region names themselves contain hyphens, e.g. satellite-map-icons)", "nl": "{who} is shown an instruction to attend to the side task set \"{active_tasks}\".", "hed": "(Sensory-event, Instructional, Visual-presentation, (Switch-attention, Label/{active_tasks}), {who})", "flag": false, "reason": "", "example": "participant Delta is shown an instruction to attend to the side task set \"satellite-map-icons-sounds\".", "sec": "warn"}, {"id": "satmap_task/enabled", "meaning": "The satellite-map side task is available (enabled), from Enabled until Disabled (per participant).", "players": "0 / 1", "interval": true, "vrule": "PROVISIONAL: pair Enabled -> Disabled per participant; duration = enabled window; unmatched -> cap at block end. Drops the disabled event.", "nl": "The satellite-map task is enabled for {who} for {duration} seconds.", "hed": "(Duration/{duration} s, (Experiment-control, (Task, Label/satellite-map), Allow, {who}))", "flag": false, "reason": "", "example": "The satellite-map task is enabled for participant Delta for 210.4 seconds.", "sec": "satmap"}, {"id": "stimulus_language/written", "meaning": "A WRITTEN (visual) comm/system sentence is presented (Stimulus/Visual/Language/Sentence). modality branches the presentation tag.", "players": "0 / 1 / both", "interval": false, "vrule": "split on \"/\" -> {modality}/{kind}; modality=written->Visual; {kind} label (empty->omit paren); HED {kind_tag}: target->Target, distractor->Distractor, question->Label/question, probe->Label/probe, empty->omit tag", "nl": "A written sentence stimulus ({kind}) is presented to {who}.", "hed": "(Sensory-event, Experimental-stimulus, Visual-presentation, {kind_tag}, (Sentence, Textblock), {who})", "flag": false, "reason": "", "example": "A written sentence stimulus (distractor) is presented to participant Echo.", "sec": "stim"}, {"id": "stimulus_language/spoken", "meaning": "A SPOKEN (auditory) comm sentence is presented (Stimulus/Auditory/Language/Sentence). modality->Auditory.", "players": "0 / 1", "interval": false, "vrule": "split on \"/\" -> {modality}/{kind}; modality=spoken->Auditory; {kind} label; HED {kind_tag}: target->Target, distractor->Distractor, question->Label/question, probe->Label/probe, empty->omit tag", "nl": "A spoken sentence stimulus ({kind}) is presented to {who}.", "hed": "(Sensory-event, Experimental-stimulus, Auditory-presentation, {kind_tag}, (Sentence), {who})", "flag": false, "reason": "", "example": "A spoken sentence stimulus (target) is presented to participant Delta.", "sec": "stim"}, {"id": "stimulus_auditory", "meaning": "A sound is played from a direction (Stimulus/Auditory/File/\"*.wav\", Direction/{Left,Right,Back}).", "players": "0 / 1", "interval": false, "vrule": "split on \"/\" -> {sound_file}/{direction}; HED: sanitize {sound_file} and {direction} -> Label", "nl": "A sound \"{sound_file}\" is played to {who} from the {direction} direction.", "hed": "(Sensory-event, Experimental-stimulus, Auditory-presentation, (Sound, Label/{sound_file}), (Directional-relation, Label/{direction}), {who})", "flag": false, "reason": "", "example": "A sound \"dog_bark.wav\" is played to participant Delta from the Back direction.", "sec": "stim"}, {"id": "auditory_feedback/reward", "meaning": "Positive reward sound, default_ding.wav (Stimulus/Auditory/Reward).", "players": "0 / 1", "interval": false, "vrule": "branch on value", "nl": "A reward feedback tone is played to {who}.", "hed": "(Sensory-event, Feedback, Reward, Auditory-presentation, Ding, {who})", "flag": false, "reason": "", "example": "A reward feedback tone is played to participant Delta.", "sec": "audfb"}, {"id": "auditory_feedback/penalty", "meaning": "Negative penalty sound, default_buzz.wav (Stimulus/Auditory/Penalty).", "players": "0 / 1", "interval": false, "vrule": "branch on value", "nl": "A penalty feedback tone is played to {who}.", "hed": "(Sensory-event, Feedback, Penalty, Auditory-presentation, Buzz, {who})", "flag": false, "reason": "", "example": "A penalty feedback tone is played to participant Delta.", "sec": "audfb"}, {"id": "auditory_feedback/failure", "meaning": "A score counter fails/hits zero (Stimulus/Auditory/Failure); failure_file is empty in the real data so no sound plays and no visual is redrawn -> a scoring-state event, negative performance feedback.", "players": "0 / 1", "interval": false, "vrule": "branch on value", "nl": "Negative (failure) feedback is registered for {who}'s score counter.", "hed": "(Experiment-control, Feedback, Negative, {who})", "flag": false, "reason": "", "example": "Negative (failure) feedback is registered for participant Delta's score counter.", "sec": "audfb"}, {"id": "auditory_feedback/recovery", "meaning": "A score counter recovers above its critical mark (Stimulus/Auditory/Recovery); recovery_file is empty in the real data -> a scoring-state event, positive performance feedback.", "players": "0 / 1", "interval": false, "vrule": "branch on value", "nl": "Positive (recovery) feedback is registered for {who}'s score counter.", "hed": "(Experiment-control, Feedback, Positive, {who})", "flag": false, "reason": "", "example": "Positive (recovery) feedback is registered for participant Delta's score counter.", "sec": "audfb"}, {"id": "satmap_icon_added", "meaning": "An icon is present on the satellite map, Add Icon->Remove Icon (by identifier); the target/distractor role is decided randomly at removal and is not recoverable from the add marker, so no Target is asserted. color+direction parsed from the Add marker.", "players": "0 / 1", "interval": true, "vrule": "PROVISIONAL: pair Add Icon -> Remove Icon by {identifier}; duration = present time; unmatched -> cap at block end. Sanitize {icon} -> Label. Drops the remove-icon event.; + color and direction parsed from the Add Icon marker -> color/direction columns", "nl": "A \"{icon}\" icon is present on the satellite map shown to {who} for {duration} seconds.", "hed": "(Duration/{duration} s, (Sensory-event, Experimental-stimulus, Visual-presentation, (Satellite-view, (Icon, Label/{icon}, {color_tag})), (Directional-relation, Label/{direction}), {who}))", "flag": false, "reason": "", "example": "A \"warning sign\" icon is present on the satellite map shown to participant Delta for 13.0 seconds.", "sec": "satmap"}, {"id": "stimulus_curbside", "meaning": "A curbside 3D object comes into close view (Stimulus/Visual/3D Object, Sidewalk Items/Becomes Closely Visible); a candidate stimulus (not necessarily a to-be-reported target), so no Target is asserted.", "players": "0 / 1", "interval": false, "vrule": "whole -> {object}; HED: sanitize {object} -> Label", "nl": "A curbside object identified as \"{object}\" comes into close view for {who}.", "hed": "(Sensory-event, Experimental-stimulus, Visual-presentation, ((Man-made-object, Label/{object}), (Close-to, {who})), Foreground-view)", "flag": false, "reason": "", "example": "A curbside object identified as \"tire stack\" comes into close view for participant Echo.", "sec": "stim"}, {"id": "pancam/agent_visible", "meaning": "A PanTheCam AI agent is visible in the participant's 360 view, from Becomes Visible until Becomes Invisible (matched by identifier + participant); one interval per visibility episode.", "players": "0 / 1", "interval": true, "vrule": "PROVISIONAL: pair Becomes Visible -> next Becomes Invisible for the same {identifier} and participant; duration = episode length. An agent may appear/disappear several times -> one event each.", "nl": "A figure is visible in {who}'s 360-degree pan-the-cam view for {duration} seconds.", "hed": "(Duration/{duration} s, (Sensory-event, Experimental-stimulus, Visual-presentation, (Stick-figure-visualization, (Close-to, {who})), (3D-view, Foreground-view)))", "flag": false, "reason": "", "example": "A figure is visible in participant Delta's 360-degree pan-the-cam view for 4.2 seconds.", "sec": "pancam"}, {"id": "pancam/reported", "meaning": "Participant correctly reports a PanTheCam agent via the Gamepad A button (Action/Correct, PanTheCam/Reported Object).", "players": "0 / 1", "interval": false, "vrule": "branch on value", "nl": "During the pan-the-cam task, {who} correctly reports an agent with a button press.", "hed": "(Agent-action, Participant-response, Correct-action, ({who}, (Press, Push-button)))", "flag": false, "reason": "", "example": "During the pan-the-cam task, participant Delta correctly reports an agent with a button press.", "sec": "pancam"}, {"id": "pancam/false_report", "meaning": "A false-alarm report - Gamepad A button press with no valid target in view (Action/Incorrect, PanTheCam/False Report).", "players": "0 / 1", "interval": false, "vrule": "branch on value", "nl": "In the pan-the-cam task, {who} makes a false-alarm report with a button press.", "hed": "(Agent-action, Participant-response, Incorrect-action, ({who}, (Press, Push-button)))", "flag": false, "reason": "", "example": "In the pan-the-cam task, participant Delta makes a false-alarm report with a button press.", "sec": "pancam"}, {"id": "pancam/doubly_reported", "meaning": "Reports an already-reported agent again via a REPEATED Gamepad-A button press (Action/Incorrect, PanTheCam/Doubly Reported Object); Repetitive scopes the press, not the button.", "players": "0 / 1", "interval": false, "vrule": "branch on value", "nl": "During the pan-the-cam task, {who} re-reports the same agent with a repeated button press.", "hed": "(Agent-action, Participant-response, Incorrect-action, ({who}, (Repetitive, (Press, Push-button))))", "flag": false, "reason": "", "example": "During the pan-the-cam task, participant Delta re-reports the same agent with a repeated button press.", "sec": "pancam"}, {"id": "pancam/missed", "meaning": "The system detects that a visible agent was not reported (PanTheCam/Visible Agent Report Missed); fired by the visibility loop - no participant action.", "players": "0 / 1", "interval": false, "vrule": "branch on value", "nl": "In the pan-the-cam task, the system registers that {who} missed reporting a visible agent.", "hed": "(Experiment-control, Miss, {who})", "flag": false, "reason": "", "example": "In the pan-the-cam task, the system registers that participant Delta missed reporting a visible agent.", "sec": "pancam"}, {"id": "query_created", "meaning": "A trial question is active, from Create until it is resolved by a response or discarded (Queries/Create..(Response|Discard), matched by identifier).", "players": "0 / 1", "interval": true, "vrule": "PROVISIONAL: duration = t_create -> first of (response|discard) for the same {identifier}; unmatched -> cap at block end. split category/correct_answer as before; drops the standalone discard; query_issue_focused and query_response remain separate events.", "nl": "A {category} question (expected answer \"{correct_answer}\") is active for {who} for {duration} seconds.", "hed": "(Duration/{duration} s, (Experiment-control, (Task, Label/query), (Questionnaire, Label/{category}, (Expected, Label/{correct_answer})), {who}))", "flag": false, "reason": "", "example": "A color question (expected answer \"yellow\") is active for participant Delta for 8.5 seconds.", "sec": "query"}, {"id": "query_issue_focused", "meaning": "A question is re-issued for immediate answer (Queries/Issue-Focused/{identifier}).", "players": "0 / 1", "interval": false, "vrule": "whole -> {query_id}", "nl": "The task re-presents an active question, labeled {query_id}, to {who} for a response.", "hed": "(Sensory-event, Experimental-stimulus, Cue, (Questionnaire, Label/{query_id}), {who})", "flag": false, "reason": "", "example": "The task re-presents an active question, labeled 17, to participant Delta for a response.", "sec": "query"}, {"id": "query_response", "meaning": "The response phase for a question (Queries/Response/{identifier}; value carries only id, not outcome).", "players": "0 / 1", "interval": false, "vrule": "whole -> {query_id}; outcome (correct/incorrect/missed/skipped/inappropriate) parsed from the marker action-prefix -> outcome column", "nl": "{who} responds to the active question labeled {query_id}.", "hed": "(Agent-action, Participant-response, {outcome_tag}, ({who}, (Respond, (Questionnaire, Label/{query_id}))))", "flag": false, "reason": "", "example": "participant Delta responds to the active question labeled 17.", "sec": "query"}, {"id": "query_missed", "meaning": "A trial question timed out with no response (on_timeout; marker carries Missed Action + Queries/Response/{id}). System-detected omission - routed out of query_response so the acted template never covers a non-action.", "players": "0 / 1", "interval": false, "vrule": "whole -> {query_id} (the question identifier)", "nl": "The active question labeled {query_id} times out with no response from {who}.", "hed": "(Experiment-control, Miss, (Task, Label/query), (Questionnaire, Label/{query_id}), {who})", "flag": false, "reason": "", "example": "The active question labeled 17 times out with no response from participant Delta.", "sec": "query"}, {"id": "response_speech_ignored", "meaning": "Recognized speech NOT accepted as a response (push-to-talk not held; Task/IgnoredResponse/Speech/<word>) - an incidental utterance, not a task response.", "players": "0 / 1", "interval": false, "vrule": "whole -> {utterance}; HED: sanitize {utterance} -> Label", "nl": "{who} makes an unaccepted spoken response \"{utterance}\".", "hed": "(Agent-action, Incidental, ({who}, (Communicate-vocally, Speak, Label/{utterance})))", "flag": false, "reason": "", "example": "participant Echo makes an unaccepted spoken response \"alpha move in front of me\".", "sec": "resp"}, {"id": "response_button", "meaning": "A touchscreen or action button press (Response/Button Press/Touch Screen/<label> OR /Warn Agents).", "players": "0 / 1 / both", "interval": false, "vrule": "whole -> {button_label}; HED: sanitize {button_label} -> Label", "nl": "The \"{button_label}\" button is pressed by {who}.", "hed": "(Agent-action, Participant-response, ({who}, (Press, Push-button, Label/{button_label})))", "flag": false, "reason": "", "example": "The \"left\" button is pressed by participant Delta.", "sec": "resp"}, {"id": "response_speech", "meaning": "Recognized speech ACCEPTED as an answer (Response/Speech/<word>).", "players": "0 / 1", "interval": false, "vrule": "whole -> {word}; HED: sanitize {word} -> Label", "nl": "{who} makes an accepted spoken response \"{word}\".", "hed": "(Agent-action, Participant-response, ({who}, (Communicate-vocally, Speak, Label/{word})))", "flag": false, "reason": "", "example": "participant Delta makes an accepted spoken response \"blue\".", "sec": "resp"}, {"id": "response_pushtotalk", "meaning": "Push-to-talk button pressed to enable the microphone (Response/Button Press/Push To Talk) - an enabling act, not the task response (that is response_speech). Marker carries no participant id; {who} from stream context.", "players": "0 / 1 / both", "interval": false, "vrule": "no value", "nl": "{who} presses the push-to-talk button to enable speaking.", "hed": "(Agent-action, ({who}, (Press, Push-button, Label/Push-to-talk)))", "flag": false, "reason": "", "example": "Participants Delta and Echo press the push-to-talk button to enable speaking.", "sec": "resp"}, {"id": "controller_button", "meaning": "Game-controller button held for an interval (Button<k> pressed..released).", "players": "0 / 1", "interval": true, "vrule": "whole -> {button} (+ {duration} = hold time); HED: sanitize {button} -> Label", "nl": "{who} holds game-controller button {button} for {duration} seconds.", "hed": "(Duration/{duration} s, (Agent-action, Participant-response, ({who}, (Hold-down, Push-button, Label/{button}))))", "flag": false, "reason": "", "example": "participant Echo holds game-controller button Button3 for 2.7 seconds.", "sec": "resp"}, {"id": "feedback_penalty", "meaning": "Points lost on a score counter (Stimulus/Feedback/Penalty/<n> Points); the marker is the VISUAL score-bar/riser update (score_event -> update_graphics, 781/795-799; ding/buzz here are gated off (nosound) and are the separate auditory_feedback event).", "players": "0 / 1", "interval": false, "vrule": "split on \"/\" -> {points}/{counter} (points keeps sign, e.g. \"-2 points\"); HED: parse integer from {points} (strip ' points', keep sign) -> Parameter-value; {counter} -> Parameter-label", "nl": "{who} loses {points} on the \"{counter}\" score counter.", "hed": "(Sensory-event, Feedback, Penalty, Visual-presentation, (Parameter-label/{counter}, Parameter-value/{points}), {who})", "flag": false, "reason": "", "example": "participant Delta loses -2 points on the \"Sounds\" score counter.", "sec": "score"}, {"id": "feedback_reward/points", "meaning": "Points gained on a score counter (Stimulus/Feedback/Reward/<n> Points); the marker is the VISUAL score-bar/riser update (same score_event path as feedback_penalty; the ding is the separate auditory_feedback event).", "players": "0 / 1", "interval": false, "vrule": "split on \"/\" -> {points}/{counter}; HED: parse integer from {points} -> Parameter-value; {counter} -> Parameter-label", "nl": "{who} gains {points} on the \"{counter}\" score counter.", "hed": "(Sensory-event, Feedback, Reward, Visual-presentation, (Parameter-label/{counter}, Parameter-value/{points}), {who})", "flag": false, "reason": "", "example": "participant Delta gains 2 points on the \"Sounds\" score counter.", "sec": "score"}, {"id": "feedback_reward/on_accuracy", "meaning": "Accuracy-based reward, NO points/counter (Stimulus/Feedback/Reward/On Accuracy). EXCEPTION to the split rule.", "players": "both", "interval": false, "vrule": "value == \"on_accuracy\" (no \"/\")", "nl": "An accuracy-based reward is given to {who}.", "hed": "(Sensory-event, Feedback, Reward, (Statistical-accuracy, Positive), {who})", "flag": false, "reason": "", "example": "An accuracy-based reward is given to participants Delta and Echo.", "sec": "score"}, {"id": "action/correct", "meaning": "Participant's action scored correct (Task/Correct Action).", "players": "0 / 1", "interval": false, "vrule": "branch on value (per-value NL phrasing)", "nl": "{who}'s action is scored as correct.", "hed": "(Agent-action, Participant-response, Correct-action, {who})", "flag": false, "reason": "", "example": "participant Delta's action is scored as correct.", "sec": "score"}, {"id": "action/incorrect", "meaning": "Participant's action scored incorrect (Task/Incorrect Action).", "players": "0 / 1", "interval": false, "vrule": "branch on value (per-value NL phrasing)", "nl": "{who}'s action is scored as an incorrect action.", "hed": "(Agent-action, Participant-response, Incorrect-action, {who})", "flag": false, "reason": "", "example": "participant Delta's action is scored as an incorrect action.", "sec": "score"}, {"id": "action/missed", "meaning": "The system registers a missed/omitted required action (Task/Missed Action), from a timeout or missed-detection handler - no participant action occurs.", "players": "0 / 1", "interval": false, "vrule": "branch on value (per-value NL phrasing)", "nl": "The system registers a missed action for {who}.", "hed": "(Experiment-control, Miss, {who})", "flag": false, "reason": "", "example": "The system registers a missed action for participant Delta.", "sec": "score"}, {"id": "checkpoint/created", "meaning": "A driving checkpoint marker exists, from Create until Remove (matched by identifier); its move and reached events are separate events within this interval.", "players": "both", "interval": true, "vrule": "PROVISIONAL: pair Create->Remove by {identifier}; duration = lifetime; unmatched -> cap at experiment/block end. move/reached remain separate events.", "nl": "A driving checkpoint marker exists in the scene shown to {who} for {duration} seconds.", "hed": "(Duration/{duration} s, (Sensory-event, Visual-presentation, (Navigational-object, Label/driving-checkpoint), {who}))", "flag": false, "reason": "", "example": "A driving checkpoint marker exists in the scene shown to participants Delta and Echo for 512.7 seconds.", "sec": "chk"}, {"id": "checkpoint/move", "meaning": "A checkpoint marker is relocated to new coords (Checkpoint/Move/{identifier|x|y|z}). Uses {position} from snap_marker.", "players": "both", "interval": false, "vrule": "branch on value; {position} = x/y/z parsed from snap_marker; HED {x}/{y}/{z}: signed decimals parsed from snap_marker", "nl": "A driving checkpoint marker is moved, and its new position is x {x}, y {y}, z {z}, in the scene shown to {who}.", "hed": "(Experiment-control, (Move, (Navigational-object, Label/driving-checkpoint)), (Position, (X-position/{x}, Y-position/{y}, Z-position/{z})), {who})", "flag": false, "reason": "", "example": "A driving checkpoint marker is moved, and its new position is x -462.37, y 269.00, z 117.19, in the scene shown to participants Delta and Echo.", "sec": "chk"}, {"id": "checkpoint/reached", "meaning": "A driving checkpoint is reached/arrived at by the driven vehicle(s) (Checkpoint/Reached); the marker carries no participant id and scope (single driver vs both) is mission-dependent, so {who} is a coverage default. Reach (arm-reach) replaced by Move+Target.", "players": "both", "interval": false, "vrule": "branch on value (joint-action; split participants with \"and\")", "nl": "{who} reach a driving checkpoint.", "hed": "(Agent-action, ({who}, (Move, Target, (Navigational-object, Label/driving-checkpoint))))", "flag": false, "reason": "", "example": "Participants Delta and Echo reach a driving checkpoint.", "sec": "chk"}, {"id": "scoring_initial", "meaning": "A score counter is set to its starting value (Scoring/Initial/<n> Points, Counter/<counter>).", "players": "0 / 1", "interval": false, "vrule": "split on \"/\" -> {points}/{counter}; HED: parse integer from {points} -> Parameter-value; {counter} -> Parameter-label", "nl": "{who} receives an initial score of {points} on the \"{counter}\" score.", "hed": "(Sensory-event, Visual-presentation, (Parameter-label/{counter}, Parameter-value/{points}), {who})", "flag": false, "reason": "", "example": "participant Echo receives an initial score of 100 points on the \"Overall\" score.", "sec": "score"}, {"id": "curbside_expecting_report", "meaning": "Report-response window opens for a curbside object (Sidewalk Items/Expecting Subject Report); nothing is presented to the subject. value empty.", "players": "0 / 1", "interval": false, "vrule": "no value", "nl": "In the curbside-reporting task, a report is now expected from {who}.", "hed": "(Experiment-control, (Task, Label/curbside-reporting), {who})", "flag": false, "reason": "", "example": "In the curbside-reporting task, a report is now expected from participant Delta.", "sec": "curb"}, {"id": "curbside_failed_report", "meaning": "The system registers that a curbside object was not reported in time (Action/Missed, Sidewalk Items/Failed To Report Object) - a timeout, no participant action.", "players": "0 / 1", "interval": false, "vrule": "no value", "nl": "The system registers that {who} failed to report a curbside object in time.", "hed": "(Experiment-control, Miss, (Task, Label/curbside-reporting), {who})", "flag": false, "reason": "", "example": "The system registers that participant Delta failed to report a curbside object in time.", "sec": "curb"}, {"id": "hint", "meaning": "An in-game hint/instruction text is shown to players (Task/Hint(s)/<text>) via the viewport instruction box; screen position varies (not centered) so no position is asserted.", "players": "both", "interval": false, "vrule": "whole -> {hint_text}; HED: sanitize {hint_text} -> Label", "nl": "An in-game hint \"{hint_text}\" is shown to {who}.", "hed": "(Sensory-event, Instructional, Visual-presentation, (Textblock, Label/{hint_text}), {who})", "flag": false, "reason": "", "example": "An in-game hint \"Agents Stay Together\" is shown to participants Delta and Echo.", "sec": "sys"}, {"id": "state_stress", "meaning": "Stress level changes to a value (State/Stress Level/<n>.000000; value reduced to integer).", "players": "0 / 1", "interval": false, "vrule": "whole -> {stress_level}; HED: {stress_level} integer -> Parameter-value", "nl": "The stress level changes to {stress_level} for {who}.", "hed": "(Experiment-control, (Condition-variable/Stress-level, Parameter-value/{stress_level}), {who})", "flag": false, "reason": "", "example": "The stress level changes to 4 for participant Delta.", "sec": "sys"}, {"id": "control_scheme", "meaning": "Control mode reset, randomized per block (Control Scheme/Reset/<mode>); a manipulated Condition-variable (static/vehicle/panning/aerial).", "players": "0 / 1", "interval": false, "vrule": "whole -> {control_mode}; HED: sanitize {control_mode} -> Label", "nl": "{who}'s control mode is reset to \"{control_mode}\".", "hed": "(Experiment-control, (Condition-variable/Control-scheme, Label/{control_mode}), {who})", "flag": false, "reason": "", "example": "participant Delta's control mode is reset to \"panning\".", "sec": "sys"}, {"id": "too_many_repeats", "meaning": "Auditory penalty (slap.wav percussive sound + score loss) for using the same response modality too many times (Too Many Repeats In Same Modality).", "players": "0 / 1", "interval": false, "vrule": "no value", "nl": "A penalty tone is played to {who} for over-using a single response modality.", "hed": "(Sensory-event, Feedback, Penalty, Auditory-presentation, (Sound, Label/slap), Label/over-using-single-response-modality, {who})", "flag": false, "reason": "", "example": "A penalty tone is played to participant Delta for over-using a single response modality.", "sec": "score"}, {"id": "agent_wanderer/added", "meaning": "A wandering AI patrol drone is present in the scene, from Add until Remove (Agents/Wanderers/Add..Remove, matched by identifier).", "players": "both", "interval": true, "vrule": "PROVISIONAL: pair Add->Remove by {identifier}; duration = t_remove - t_add; batch-removed at block end or never removed -> cap at block end. Drops the remove event.", "nl": "A patrol drone is present in the shared scene for {duration} seconds, involving {who}.", "hed": "(Duration/{duration} s, (Experiment-control, (Robot, Label/patrol-drone), {who}))", "flag": false, "reason": "", "example": "A patrol drone is present in the shared scene for 345.9 seconds, involving participants Delta and Echo.", "sec": "agent"}, {"id": "agent_invader/added", "meaning": "A hostile invader drone is present in the scene, from Add until Remove (matched by identifier); its wait/approach/retreat behaviors are separate events within this interval.", "players": "both", "interval": true, "vrule": "PROVISIONAL: pair Add->Remove by {identifier}; duration = t_remove - t_add; unmatched/batch -> cap at block end. wait/approach/retreat remain separate point events.", "nl": "A hostile invader drone is present in the shared scene for {duration} seconds, involving {who}.", "hed": "(Duration/{duration} s, (Experiment-control, ((Robot, Label/invader-drone), Threat), {who}))", "flag": false, "reason": "", "example": "A hostile invader drone is present in the shared scene for 12.4 seconds, involving participants Delta and Echo.", "sec": "agent"}, {"id": "agent_invader/wait", "meaning": "A hostile invader-drone idles/halts for a random interval (Agents/Invaders/Wait).", "players": "both", "interval": false, "vrule": "branch on value", "nl": "A hostile invader drone waits in the shared scene, involving {who}.", "hed": "(Agent-action, (((Robot, Label/invader-drone), Threat), Halt), {who})", "flag": false, "reason": "", "example": "A hostile invader drone waits in the shared scene, involving participants Delta and Echo.", "sec": "agent"}, {"id": "agent_invader/approach", "meaning": "A hostile invader-drone moves TOWARD a hotspot location (Agents/Invaders/Approach) - the target is a hotspot, not the participant; Towards mirrors retreat's Away-from (a direction qualifier, no operand).", "players": "both", "interval": false, "vrule": "branch on value", "nl": "A hostile invader drone approaches in the shared scene, involving {who}.", "hed": "(Agent-action, (((Robot, Label/invader-drone), Threat), (Move, Towards)), {who})", "flag": false, "reason": "", "example": "A hostile invader drone approaches in the shared scene, involving participants Delta and Echo.", "sec": "agent"}, {"id": "agent_invader/retreat", "meaning": "A hostile invader-drone moves away, fleeing the spotter (Agents/Invaders/Retreat); the spotter may be an autonomous agent, so the direction is left un-tied to a specific participant.", "players": "both", "interval": false, "vrule": "branch on value", "nl": "A hostile invader drone retreats in the shared scene, involving {who}.", "hed": "(Agent-action, (((Robot, Label/invader-drone), Threat), (Move, Away-from)), {who})", "flag": false, "reason": "", "example": "A hostile invader drone retreats in the shared scene, involving participants Delta and Echo.", "sec": "agent"}], "sections": [{"id": "struct", "name": "Session structure & timing", "short": "Structure", "count": 6}, {"id": "warn", "name": "Warnings & attention", "short": "Warnings", "count": 4}, {"id": "satmap", "name": "Satellite-map task", "short": "Sat-map", "count": 2}, {"id": "stim", "name": "Stimuli", "short": "Stimuli", "count": 4}, {"id": "audfb", "name": "Auditory feedback tones", "short": "Aud. feedback", "count": 4}, {"id": "pancam", "name": "PanTheCam task", "short": "PanTheCam", "count": 5}, {"id": "query", "name": "Queries", "short": "Queries", "count": 4}, {"id": "resp", "name": "Participant responses", "short": "Responses", "count": 5}, {"id": "score", "name": "Scoring & action feedback", "short": "Scoring", "count": 8}, {"id": "chk", "name": "Checkpoints", "short": "Checkpoints", "count": 3}, {"id": "curb", "name": "Curbside reporting", "short": "Curbside", "count": 2}, {"id": "sys", "name": "System state & hints", "short": "System", "count": 3}, {"id": "agent", "name": "AI agents  ·  spawn / behavior / despawn", "short": "AI agents", "count": 5}], "stats": {"total": 55, "ok": 55, "flag": 0}};
+const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+function paint(s){
+  return esc(s)
+    .replace(/\{[^}]+\}/g, m => '<span class="ph">'+m+'</span>')
+    .replace(/[()]/g, m => '<span class="pn">'+m+'</span>');
+}
+const root = document.getElementById('sections');
+const nav = document.getElementById('navin');
+D.sections.forEach((sec,i)=>{
+  const rws = D.rows.filter(r=>r.sec===sec.id);
+  if(!rws.length) return;
+  const a=document.createElement('a');
+  a.href='#sec-'+sec.id; a.dataset.sec=sec.id;
+  a.innerHTML=esc(sec.short)+'<span class="c">'+sec.count+'</span>';
+  nav.appendChild(a);
+
+  const s=document.createElement('section');
+  s.className='sec'; s.id='sec-'+sec.id;
+  const idx=String.fromCharCode(65+i);
+  s.innerHTML='<div class="sec-h"><span class="idx">'+idx+'</span>'
+    +'<h2>'+esc(sec.name)+'</h2><span class="ct">'+sec.count+' event'
+    +(sec.count>1?'s':'')+'</span></div>';
+  const g=document.createElement('div'); g.className='grid';
+  rws.forEach(r=>{
+    const isBranch=r.id.includes('/');
+    const idHtml = isBranch
+      ? esc(r.id.split('/')[0])+'<span class="br">/</span>'+esc(r.id.split('/').slice(1).join('/'))
+      : esc(r.id);
+    const chips=[];
+    chips.push('<span class="chip"><span class="k">players</span> '+esc(r.players)+'</span>');
+    if(r.interval) chips.push('<span class="chip">interval</span>');
+    chips.push('<span class="pill '+(r.flag?'flag':'ok')+'">'+(r.flag?'Flag':'OK')+'</span>');
+    let card='<article class="evt'+(r.flag?' isflag':'')+'">';
+    card+='<div class="evt-h"><span class="evt-id">'+idHtml+'</span><span class="chips">'+chips.join('')+'</span></div>';
+    card+='<p class="meaning">'+esc(r.meaning)+'</p>';
+    card+='<div class="hed">'+paint(r.hed)+'</div>';
+    if(r.flag) card+='<div class="flagnote"><span><b>Open call.</b> '+esc(r.reason)+'</span></div>';
+    card+='<p class="eg"><span class="lab">e.g.</span>'+esc(r.example)+'</p>';
+    card+='<details class="more"><summary><span class="tw">&#9656;</span>build rules</summary><dl>'
+      +'<dt>Phrasing</dt><dd class="mono">'+paint(r.nl)+'</dd>'
+      +'<dt>Fill rule</dt><dd>'+esc(r.vrule)+'</dd></dl></details>';
+    card+='</article>';
+    g.insertAdjacentHTML('beforeend',card);
+  });
+  s.appendChild(g); root.appendChild(s);
+});
+
+// active-section highlight
+const links=[...nav.querySelectorAll('a')];
+const byId=id=>links.find(l=>l.dataset.sec===id);
+const io=new IntersectionObserver(es=>{
+  es.forEach(e=>{
+    if(e.isIntersecting){
+      links.forEach(l=>l.classList.remove('active'));
+      const id=e.target.id.replace('sec-','');
+      const l=byId(id); if(l){l.classList.add('active');
+        l.scrollIntoView({block:'nearest',inline:'nearest'});}
+    }
+  });
+},{rootMargin:'-52px 0px -70% 0px',threshold:0});
+document.querySelectorAll('.sec').forEach(s=>io.observe(s));
+</script>
+</body>
+</html>

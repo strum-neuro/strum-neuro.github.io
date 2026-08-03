@@ -95,12 +95,13 @@ header.top p.lede{margin:14px 0 0;color:var(--muted);max-width:64ch;font-size:16
 .cnote{font-family:var(--mono);font-size:10.5px;color:var(--muted);margin-top:12px;line-height:1.65}
 
 /* ---- routes -------------------------------------------------------------- */
-.routes{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:14px;margin-top:26px}
+.routes{display:grid;grid-template-columns:repeat(auto-fit,minmax(268px,1fr));gap:14px;margin-top:26px}
 .card{display:block;background:var(--surface);border:1px solid var(--border);border-radius:14px;
   padding:18px 18px 16px;text-decoration:none;color:inherit;box-shadow:var(--shadow);transition:.14s}
 .card:hover{border-color:var(--accent);transform:translateY(-1px)}
 .card h3{font-size:17px;font-weight:640;margin:7px 0 5px;letter-spacing:-.01em}
 .card p{margin:0;color:var(--muted);font-size:13.5px}
+.card code{font-family:var(--mono);font-size:12px}
 .card .go{font-family:var(--mono);font-size:11.5px;color:var(--accent-bright);margin-top:11px;
   display:inline-block}
 
@@ -190,6 +191,14 @@ footer{margin-top:44px;border-top:1px solid var(--border);padding-top:18px;color
       <p>The task itself, drawn to scale. Pick a block, then a mission, and see what the task
       emits inside it — which events identify that mission, and which participant they belong to.</p>
       <span class="go">Open the structure view →</span>
+    </a>
+    <a class="card" href="hed/">
+      <div class="eyebrow">Annotate</div>
+      <h3>Event → HED mapping</h3>
+      <p>All 55 event types mapped to a validated HED-3G tag: what each one means, the tag itself
+      with its placeholders marked, and a real filled example. Validated with <code>hedtools</code>
+      against schema 8.4.0.</p>
+      <span class="go">Open the HED mapping →</span>
     </a>
   </div>
 
